@@ -6,30 +6,54 @@ import { config } from 'config'
 import { useInfoStore } from './stores/info'
 
 const routes: RouteRecordRaw[] = [
-  // overview page
+  // Redirect root to default workspace
   {
-    name: 'overview',
     path: '/',
-    component: () => import('@/pages/overview/Overview.vue'),
+    redirect: '/default',
+  },
+
+  // Workspace management pages (outside workspace context)
+  {
+    name: 'workspaces',
+    path: '/workspaces',
+    component: () => import('@/pages/workspaces/List.vue'),
     meta: {
-      title: 'Overview',
+      title: 'Workspaces',
+    },
+  },
+  {
+    name: 'workspace-create',
+    path: '/workspaces/create',
+    component: () => import('@/pages/workspaces/Create.vue'),
+    meta: {
+      title: 'Create Workspace',
     },
   },
 
-  // not found page
+  // About page (gateway info) - MUST be before /:workspace to avoid route conflict
   {
-    name: 'not-found',
-    path: '/:pathMatch(.*)*',
-    component: () => import('@/pages/NotFound.vue'),
+    name: 'about',
+    path: '/about',
+    component: () => import('@/pages/overview/Overview.vue'),
     meta: {
-      title: 'Not Found',
+      title: 'About',
+    },
+  },
+
+  // Workspace overview (workspace statistics)
+  {
+    name: 'workspace-overview',
+    path: '/:workspace',
+    component: () => import('@/pages/workspaces/Detail.vue'),
+    meta: {
+      title: 'Workspace Overview',
     },
   },
 
   // service pages
   {
     name: 'service-list',
-    path: '/services',
+    path: '/:workspace/services',
     component: () => import('@/pages/services/List.vue'),
     meta: {
       entity: 'service',
@@ -38,7 +62,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     name: 'service-create',
-    path: '/services/create',
+    path: '/:workspace/services/create',
     component: () => import('@/pages/services/Form.vue'),
     meta: {
       entity: 'service',
@@ -47,7 +71,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     name: 'service-edit',
-    path: '/services/:id/edit',
+    path: '/:workspace/services/:id/edit',
     component: () => import('@/pages/services/Form.vue'),
     meta: {
       entity: 'service',
@@ -56,7 +80,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     name: 'service-detail',
-    path: '/services/:id',
+    path: '/:workspace/services/:id',
     component: () => import('@/pages/services/Detail.vue'),
     meta: {
       entity: 'service',
@@ -88,7 +112,7 @@ const routes: RouteRecordRaw[] = [
   // route pages
   {
     name: 'route-list',
-    path: '/routes',
+    path: '/:workspace/routes',
     component: () => import('@/pages/routes/List.vue'),
     meta: {
       entity: 'route',
@@ -97,7 +121,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     name: 'route-create',
-    path: '/routes/create',
+    path: '/:workspace/routes/create',
     component: () => import('@/pages/routes/Form.vue'),
     meta: {
       entity: 'route',
@@ -106,7 +130,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     name: 'route-edit',
-    path: '/routes/:id/edit',
+    path: '/:workspace/routes/:id/edit',
     component: () => import('@/pages/routes/Form.vue'),
     meta: {
       entity: 'route',
@@ -115,7 +139,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     name: 'route-detail',
-    path: '/routes/:id',
+    path: '/:workspace/routes/:id',
     component: () => import('@/pages/routes/Detail.vue'),
     meta: {
       entity: 'route',
@@ -138,7 +162,7 @@ const routes: RouteRecordRaw[] = [
   // consumer pages
   {
     name: 'consumer-list',
-    path: '/consumers',
+    path: '/:workspace/consumers',
     component: () => import('@/pages/consumers/List.vue'),
     meta: {
       entity: 'consumer',
@@ -147,7 +171,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     name: 'consumer-create',
-    path: '/consumers/create',
+    path: '/:workspace/consumers/create',
     component: () => import('@/pages/consumers/Form.vue'),
     meta: {
       entity: 'consumer',
@@ -156,7 +180,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     name: 'consumer-edit',
-    path: '/consumers/:id/edit',
+    path: '/:workspace/consumers/:id/edit',
     component: () => import('@/pages/consumers/Form.vue'),
     meta: {
       entity: 'consumer',
@@ -165,7 +189,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     name: 'consumer-detail',
-    path: '/consumers/:id',
+    path: '/:workspace/consumers/:id',
     component: () => import('@/pages/consumers/Detail.vue'),
     meta: {
       entity: 'consumer',
@@ -195,7 +219,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     name: 'consumer-detail-credentials-create',
-    path: '/consumers/:id/credentials/:pluginType/create',
+    path: '/:workspace/consumers/:id/credentials/:pluginType/create',
     component: () => import('@/pages/consumers/CredentialForm.vue'),
     meta: {
       entity: 'consumer',
@@ -204,7 +228,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     name: 'consumer-detail-credentials-edit',
-    path: '/consumers/:id/credentials/:pluginType/:credentialId/edit',
+    path: '/:workspace/consumers/:id/credentials/:pluginType/:credentialId/edit',
     component: () => import('@/pages/consumers/CredentialForm.vue'),
     meta: {
       entity: 'consumer',
@@ -215,7 +239,7 @@ const routes: RouteRecordRaw[] = [
   // plugin pages
   {
     name: 'plugin-list',
-    path: '/plugins',
+    path: '/:workspace/plugins',
     component: () => import('@/pages/plugins/List.vue'),
     meta: {
       entity: 'plugin',
@@ -224,7 +248,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     name: 'plugin-select',
-    path: '/plugins/select',
+    path: '/:workspace/plugins/select',
     component: () => import('@/pages/plugins/Select.vue'),
     meta: {
       entity: 'plugin',
@@ -233,7 +257,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     name: 'plugin-create',
-    path: '/plugins/:pluginType/create',
+    path: '/:workspace/plugins/:pluginType/create',
     component: () => import('@/pages/plugins/Form.vue'),
     meta: {
       entity: 'plugin',
@@ -242,7 +266,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     name: 'plugin-edit',
-    path: '/plugins/:pluginType/:id/edit',
+    path: '/:workspace/plugins/:pluginType/:id/edit',
     component: () => import('@/pages/plugins/Form.vue'),
     meta: {
       entity: 'plugin',
@@ -251,7 +275,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     name: 'plugin-detail',
-    path: '/plugins/:pluginType/:id',
+    path: '/:workspace/plugins/:pluginType/:id',
     component: () => import('@/pages/plugins/Detail.vue'),
     meta: {
       entity: 'plugin',
@@ -262,7 +286,7 @@ const routes: RouteRecordRaw[] = [
   // upstream pages
   {
     name: 'upstream-list',
-    path: '/upstreams',
+    path: '/:workspace/upstreams',
     component: () => import('@/pages/upstreams/List.vue'),
     meta: {
       entity: 'upstream',
@@ -271,7 +295,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     name: 'upstream-create',
-    path: '/upstreams/create',
+    path: '/:workspace/upstreams/create',
     component: () => import('@/pages/upstreams/Form.vue'),
     meta: {
       entity: 'upstream',
@@ -280,7 +304,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     name: 'upstream-edit',
-    path: '/upstreams/:id/edit',
+    path: '/:workspace/upstreams/:id/edit',
     component: () => import('@/pages/upstreams/Form.vue'),
     meta: {
       entity: 'upstream',
@@ -289,7 +313,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     name: 'upstream-detail',
-    path: '/upstreams/:id',
+    path: '/:workspace/upstreams/:id',
     component: () => import('@/pages/upstreams/Detail.vue'),
     meta: {
       entity: 'upstream',
@@ -311,7 +335,7 @@ const routes: RouteRecordRaw[] = [
   // sni pages
   {
     name: 'sni-list',
-    path: '/snis',
+    path: '/:workspace/snis',
     component: () => import('@/pages/snis/List.vue'),
     meta: {
       entity: 'sni',
@@ -320,7 +344,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     name: 'sni-create',
-    path: '/snis/create',
+    path: '/:workspace/snis/create',
     component: () => import('@/pages/snis/Form.vue'),
     meta: {
       entity: 'sni',
@@ -329,7 +353,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     name: 'sni-edit',
-    path: '/snis/:id/edit',
+    path: '/:workspace/snis/:id/edit',
     component: () => import('@/pages/snis/Form.vue'),
     meta: {
       entity: 'sni',
@@ -340,7 +364,7 @@ const routes: RouteRecordRaw[] = [
   // key set pages
   {
     name: 'key-set-list',
-    path: '/key-sets',
+    path: '/:workspace/key-sets',
     component: () => import('@/pages/key-sets/List.vue'),
     meta: {
       entity: 'key-set',
@@ -349,7 +373,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     name: 'key-set-create',
-    path: '/key-sets/create',
+    path: '/:workspace/key-sets/create',
     component: () => import('@/pages/key-sets/Form.vue'),
     meta: {
       entity: 'key-set',
@@ -358,7 +382,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     name: 'key-set-edit',
-    path: '/key-sets/:id/edit',
+    path: '/:workspace/key-sets/:id/edit',
     component: () => import('@/pages/key-sets/Form.vue'),
     meta: {
       entity: 'key-set',
@@ -367,7 +391,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     name: 'key-set-detail',
-    path: '/key-sets/:id',
+    path: '/:workspace/key-sets/:id',
     component: () => import('@/pages/key-sets/Detail.vue'),
     meta: {
       entity: 'key-set',
@@ -386,16 +410,15 @@ const routes: RouteRecordRaw[] = [
     ],
   },
 
-  // Data plane nodes pages
-  // {
-  //   name: 'data-plane-nodes',
-  //   path: '/data-plane-nodes',
-  //   component: () => import('@/pages/data-plane-nodes/List.vue'),
-  //   meta: {
-  //     entity: 'data-plane-node',
-  //     title: 'Data Plane Nodes',
-  //   },
-  // },
+  // not found page
+  {
+    name: 'not-found',
+    path: '/:pathMatch(.*)*',
+    component: () => import('@/pages/NotFound.vue'),
+    meta: {
+      title: 'Not Found',
+    },
+  },
 ]
 
 type EntityNameDefinition = { key: string, keyPlural?: string, capitalizedName?: string, capitalizedNamePlural?: string }
@@ -431,7 +454,7 @@ entities.forEach((entityName: EntityName) => {
   routes.push(
     {
       name: `${entity.key}-list`,
-      path: `/${entity.keyPlural}`,
+      path: `/:workspace/${entity.keyPlural}`,
       component: () => import(`@/pages/${entity.keyPlural}/List.vue`),
       meta: {
         entity: entity.key,
@@ -440,7 +463,7 @@ entities.forEach((entityName: EntityName) => {
     },
     {
       name: `${entity.key}-create`,
-      path: `/${entity.keyPlural}/create`,
+      path: `/:workspace/${entity.keyPlural}/create`,
       component: () => import(`@/pages/${entity.keyPlural}/Form.vue`),
       meta: {
         entity: entity.key,
@@ -449,7 +472,7 @@ entities.forEach((entityName: EntityName) => {
     },
     {
       name: `${entity.key}-edit`,
-      path: `/${entity.keyPlural}/:id/edit`,
+      path: `/:workspace/${entity.keyPlural}/:id/edit`,
       component: () => import(`@/pages/${entity.keyPlural}/Form.vue`),
       meta: {
         entity: entity.key,
@@ -458,7 +481,7 @@ entities.forEach((entityName: EntityName) => {
     },
     {
       name: `${entity.key}-detail`,
-      path: `/${entity.keyPlural}/:id`,
+      path: `/:workspace/${entity.keyPlural}/:id`,
       component: () => import(`@/pages/${entity.keyPlural}/Detail.vue`),
       meta: {
         entity: entity.key,

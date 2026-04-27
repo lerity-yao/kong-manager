@@ -16,6 +16,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { CertificateForm } from '@kong-ui-public/entities-certificates'
 import { useFormGeneralConfig } from '@/composables/useFormGeneralConfig'
 import { useFormRedirectOnCancel } from '@/composables/useFormRedirect'
+import { useCurrentWorkspace } from '@/composables/useCurrentWorkspace'
 import { useToaster } from '@/composables/useToaster'
 import { useI18n } from '@/composables/useI18n'
 
@@ -25,6 +26,7 @@ defineOptions({
 
 const route = useRoute()
 const router = useRouter()
+const { workspace } = useCurrentWorkspace()
 const toaster = useToaster()
 const { t } = useI18n()
 
@@ -33,18 +35,18 @@ const isEditing = computed(() => !!id.value)
 
 const routeOnCancel = useFormRedirectOnCancel(
   isEditing.value
-    ? { name: 'certificate-detail', params: { id: id.value } }
-    : { name: 'certificate-list' },
+    ? { name: 'certificate-detail', params: { workspace: workspace.value, id: id.value } }
+    : { name: 'certificate-list', params: { workspace: workspace.value } },
 )
 
 const certificateFormConfig = reactive({
   ...useFormGeneralConfig(),
-  sniListRoute: { name: 'sni-list' },
+  sniListRoute: { name: 'sni-list', params: { workspace: workspace.value } },
   cancelRoute: routeOnCancel,
 })
 
 const handleUpdate = (entity) => {
-  router.push({ name: 'certificate-detail', params: { id: entity.id || id.value } })
+  router.push({ name: 'certificate-detail', params: { workspace: workspace.value, id: entity.id || id.value } })
   toaster.open({
     appearance: 'success',
     message: t(

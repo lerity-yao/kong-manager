@@ -28,6 +28,7 @@ import { GatewayServiceList, type EntityRow } from '@kong-ui-public/entities-gat
 import type { FilterSchema } from '@kong-ui-public/entities-shared'
 import { useListGeneralConfig } from '@/composables/useListGeneralConfig'
 import { useCopyEventHandlers } from '@/composables/useCopyEventHandlers'
+import { useCurrentWorkspace } from '@/composables/useCurrentWorkspace'
 import { useToaster } from '@/composables/useToaster'
 import { useI18n } from '@/composables/useI18n'
 import { useDocsLink } from '@/composables/useDocsLink'
@@ -41,17 +42,20 @@ const toaster = useToaster()
 const { t } = useI18n()
 const docsLink = useDocsLink(EntityType.GatewayService)
 
+const { workspace } = useCurrentWorkspace()
+
 const createRoute = computed(() => {
-  return { name: 'service-create' }
+  return { name: 'service-create', params: { workspace: workspace.value } }
 })
 
 const getViewRoute = (id: string) => {
-  return { name: 'service-detail', params: { id } }
+  return { name: 'service-detail', params: { workspace: workspace.value, id } }
 }
 
 const getEditRoute = (id: string) => ({
   name: 'service-edit',
   params: {
+    workspace: workspace.value,
     id,
   },
 })

@@ -15,6 +15,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { ConsumerForm } from '@kong-ui-public/entities-consumers'
 import { useFormGeneralConfig } from '@/composables/useFormGeneralConfig'
 import { useFormRedirectOnCancel } from '@/composables/useFormRedirect'
+import { useCurrentWorkspace } from '@/composables/useCurrentWorkspace'
 import { useToaster } from '@/composables/useToaster'
 import { useI18n } from '@/composables/useI18n'
 
@@ -24,6 +25,7 @@ defineOptions({
 
 const route = useRoute()
 const router = useRouter()
+const { workspace } = useCurrentWorkspace()
 const toaster = useToaster()
 const { t } = useI18n()
 
@@ -32,8 +34,8 @@ const isEditing = computed(() => !!id.value)
 
 const routeOnCancel = useFormRedirectOnCancel(
   isEditing.value
-    ? { name: 'consumer-detail', params: { id: id.value } }
-    : { name: 'consumer-list' },
+    ? { name: 'consumer-detail', params: { workspace: workspace.value, id: id.value } }
+    : { name: 'consumer-list', params: { workspace: workspace.value } },
 )
 
 const consumerFormConfig = reactive({
@@ -42,7 +44,7 @@ const consumerFormConfig = reactive({
 })
 
 const handleUpdate = (entity) => {
-  router.push({ name: 'consumer-detail', params: { id: entity.id || id.value } })
+  router.push({ name: 'consumer-detail', params: { workspace: workspace.value, id: entity.id || id.value } })
   toaster.open({
     appearance: 'success',
     message: t(

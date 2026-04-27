@@ -28,6 +28,7 @@ import { CACertificateList, type EntityRow } from '@kong-ui-public/entities-cert
 import { useCopyEventHandlers } from '@/composables/useCopyEventHandlers'
 import { useI18n } from '@/composables/useI18n'
 import { useListGeneralConfig } from '@/composables/useListGeneralConfig'
+import { useCurrentWorkspace } from '@/composables/useCurrentWorkspace'
 import { useToaster } from '@/composables/useToaster'
 import { useDocsLink } from '@/composables/useDocsLink'
 import { EntityType } from '@/types'
@@ -40,17 +41,19 @@ const toaster = useToaster()
 const { t } = useI18n()
 const docsLink = useDocsLink(EntityType.CACertificate)
 
+const { workspace } = useCurrentWorkspace()
+
 const createRoute = computed(() => {
-  return { name: 'ca-certificate-create' }
+  return { name: 'ca-certificate-create', params: { workspace: workspace.value } }
 })
 
 const getViewRoute = (id: string) => {
-  return { name: 'ca-certificate-detail', params: { id } }
+  return { name: 'ca-certificate-detail', params: { workspace: workspace.value, id } }
 }
 
 const getEditRoute = (id: string) => ({
   name: 'ca-certificate-edit',
-  params: { id },
+  params: { workspace: workspace.value, id },
 })
 
 const caCertificateListConfig = reactive({

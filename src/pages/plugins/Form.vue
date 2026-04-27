@@ -25,6 +25,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { PluginForm, type EntityRow as PluginSchema } from '@kong-ui-public/entities-plugins'
 import { useFormGeneralConfig } from '@/composables/useFormGeneralConfig'
 import { useURLFromRouteQuery } from '@/composables/useRedirect'
+import { useCurrentWorkspace } from '@/composables/useCurrentWorkspace'
 import { useI18n } from '@/composables/useI18n'
 import { useToaster } from '@/composables/useToaster'
 import PageHeader from '@/components/PageHeader.vue'
@@ -34,6 +35,7 @@ defineOptions({ name: 'PluginForm' })
 
 const route = useRoute()
 const router = useRouter()
+const { workspace } = useCurrentWorkspace()
 const toaster = useToaster()
 const { t } = useI18n()
 
@@ -122,6 +124,7 @@ const onSave = (plugin) => {
     router.push({
       name: entityScope.value.redirectRouteName,
       params: {
+        workspace: workspace.value,
         id: entityScope.value.id,
       },
     })
@@ -129,7 +132,7 @@ const onSave = (plugin) => {
     return
   }
 
-  router.push({ name: 'plugin-detail', params: { id: plugin.id } })
+  router.push({ name: 'plugin-detail', params: { workspace: workspace.value, id: plugin.id } })
 }
 </script>
 

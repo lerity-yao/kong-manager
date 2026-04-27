@@ -28,6 +28,7 @@ import PageHeader from '@/components/PageHeader.vue'
 import { useListGeneralConfig } from '@/composables/useListGeneralConfig'
 import { useListRedirect } from '@/composables/useListRedirect'
 import { useCopyEventHandlers } from '@/composables/useCopyEventHandlers'
+import { useCurrentWorkspace } from '@/composables/useCurrentWorkspace'
 import { useToaster } from '@/composables/useToaster'
 import { useI18n } from '@/composables/useI18n'
 
@@ -49,6 +50,7 @@ const props = defineProps({
 })
 
 const route = useRoute()
+const { workspace } = useCurrentWorkspace()
 const toaster = useToaster()
 const { t } = useI18n()
 
@@ -63,6 +65,7 @@ const createRoute = computed(() => {
   return {
     name: 'consumer-detail-credentials-create',
     params: {
+      workspace: workspace.value,
       id: consumerId.value,
       pluginType: props.pluginType,
     },
@@ -74,6 +77,7 @@ const getEditRoute = (id: string) => {
   return {
     name: 'consumer-detail-credentials-edit',
     params: {
+      workspace: workspace.value,
       id: consumerId.value,
       credentialId: id,
       pluginType: props.pluginType,

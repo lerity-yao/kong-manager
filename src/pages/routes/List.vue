@@ -34,6 +34,7 @@ import type { FilterSchema } from '@kong-ui-public/entities-shared'
 import { useListGeneralConfig } from '@/composables/useListGeneralConfig'
 import { useListRedirect } from '@/composables/useListRedirect'
 import { useCopyEventHandlers } from '@/composables/useCopyEventHandlers'
+import { useCurrentWorkspace } from '@/composables/useCurrentWorkspace'
 import { useToaster } from '@/composables/useToaster'
 import { useI18n } from '@/composables/useI18n'
 import { useDocsLink } from '@/composables/useDocsLink'
@@ -48,6 +49,7 @@ const route = useRoute()
 const { t } = useI18n()
 const docsLink = useDocsLink(EntityType.Route)
 const { createRedirectRouteQuery } = useListRedirect()
+const { workspace } = useCurrentWorkspace()
 
 const infoStore = useInfoStore()
 const { infoConfig } = storeToRefs(infoStore)
@@ -83,6 +85,7 @@ const filterSchema: FilterSchema = {
 const createRoute = computed(() => {
   return {
     name: 'route-create',
+    params: { workspace: workspace.value },
     query: serviceId.value ? {
       serviceId: serviceId.value,
       ...createRedirectRouteQuery(),
@@ -92,7 +95,7 @@ const createRoute = computed(() => {
 
 const getViewRoute = (id: string) => ({
   name: 'route-detail',
-  params: { id },
+  params: { workspace: workspace.value, id },
   query: {
     serviceId: serviceId.value,
     ...createRedirectRouteQuery(),
@@ -102,6 +105,7 @@ const getViewRoute = (id: string) => ({
 const getEditRoute = (id: string) => ({
   name: 'route-edit',
   params: {
+    workspace: workspace.value,
     id,
   },
   query: serviceId.value ? {

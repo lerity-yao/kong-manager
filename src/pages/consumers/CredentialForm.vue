@@ -20,11 +20,13 @@ import { useRoute, useRouter } from 'vue-router'
 import { PluginForm } from '@kong-ui-public/entities-plugins'
 import { useURLFromRouteQuery } from '@/composables/useRedirect'
 import { useFormGeneralConfig } from '@/composables/useFormGeneralConfig'
+import { useCurrentWorkspace } from '@/composables/useCurrentWorkspace'
 import { useI18n } from '@/composables/useI18n'
 import { useToaster } from '@/composables/useToaster'
 
 const route = useRoute()
 const router = useRouter()
+const { workspace } = useCurrentWorkspace()
 const { t } = useI18n()
 const toaster = useToaster()
 const redirectPath = useURLFromRouteQuery('redirect')
@@ -41,7 +43,7 @@ const title = computed(
 )
 
 const cancelRoute = computed(() => {
-  return redirectPath.value ?? { name: 'consumer-detail-credentials' }
+  return redirectPath.value ?? { name: 'consumer-detail-credentials', params: { workspace: workspace.value } }
 })
 
 const config = reactive({
@@ -70,7 +72,7 @@ const onSave = () => {
   }
 
   if (redirectPath.value) {
-    router.push(redirectPath.value ?? { name: 'consumer-detail-credentials' })
+    router.push(redirectPath.value ?? { name: 'consumer-detail-credentials', params: { workspace: workspace.value } })
   }
 }
 </script>

@@ -36,6 +36,7 @@ import type { FilterSchema } from '@kong-ui-public/entities-shared'
 import { useListGeneralConfig } from '@/composables/useListGeneralConfig'
 import { useListRedirect } from '@/composables/useListRedirect'
 import { useCopyEventHandlers } from '@/composables/useCopyEventHandlers'
+import { useCurrentWorkspace } from '@/composables/useCurrentWorkspace'
 import { useToaster } from '@/composables/useToaster'
 import { useI18n } from '@/composables/useI18n'
 import { useDocsLink } from '@/composables/useDocsLink'
@@ -50,6 +51,7 @@ const toaster = useToaster()
 const { t } = useI18n()
 const docsLink = useDocsLink(EntityType.Plugin)
 const route = useRoute()
+const { workspace } = useCurrentWorkspace()
 const cacheIdentifier = computed(() => `plugins-${route.params?.id}`)
 const entityType = computed(() => route.meta?.scopedIn as ScopedEntityType)
 const scopedQuery = computed(() => {
@@ -68,6 +70,7 @@ const scopedQuery = computed(() => {
 const createRoute = computed(() => {
   return {
     name: 'plugin-select',
+    params: { workspace: workspace.value },
     query: {
       ...scopedQuery.value,
     },
@@ -78,6 +81,7 @@ const getScopedEntityViewRoute = (type: ViewRouteType, id: string): RouteLocatio
   return {
     name: `${type}-detail`,
     params: {
+      workspace: workspace.value,
       id,
     },
   }
@@ -87,6 +91,7 @@ const getViewRoute = (plugin: Pick<EntityRow, 'id' | 'name'>) => {
   return {
     name: 'plugin-detail',
     params: {
+      workspace: workspace.value,
       id: plugin.id,
       pluginType: plugin.name,
     },
@@ -100,6 +105,7 @@ const getViewRoute = (plugin: Pick<EntityRow, 'id' | 'name'>) => {
 const getEditRoute = (plugin: EntityRow) => ({
   name: 'plugin-edit',
   params: {
+    workspace: workspace.value,
     id: plugin.id,
     pluginType: plugin.name,
   },

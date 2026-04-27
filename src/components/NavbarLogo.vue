@@ -1,7 +1,7 @@
 <template>
   <div class="brand-logo">
     <router-link
-      :to="{ name: 'overview' }"
+      :to="{ name: 'workspace-overview', params: { workspace: 'default' } }"
       title="go to overview page"
     >
       <img

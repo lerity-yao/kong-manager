@@ -14,11 +14,12 @@ import type { RouteLocationRaw } from 'vue-router'
 
 import { useI18n } from '@/composables/useI18n'
 import { useURLFromRouteQuery } from '@/composables/useRedirect'
+import { useCurrentWorkspace } from '@/composables/useCurrentWorkspace'
 
 const props = defineProps({
   entity: {
     type: String,
-    required: true,
+    required: false,
     default: '',
   },
 })
@@ -26,10 +27,12 @@ const props = defineProps({
 const { t } = useI18n()
 const router = useRouter()
 const redirectURL = useURLFromRouteQuery('redirect')
+const { workspace } = useCurrentWorkspace()
 
 const back = () => {
   let backTo: RouteLocationRaw = {
-    name: props.entity ? `${props.entity}-list` : 'overview',
+    name: props.entity ? `${props.entity}-list` : 'about',
+    ...(props.entity ? { params: { workspace: workspace.value } } : {}),
   }
 
   if (redirectURL.value) {

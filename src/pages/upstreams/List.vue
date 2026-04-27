@@ -28,6 +28,7 @@ import { UpstreamsList, type EntityRow } from '@kong-ui-public/entities-upstream
 import type { FilterSchema } from '@kong-ui-public/entities-shared'
 import { useListGeneralConfig } from '@/composables/useListGeneralConfig'
 import { useCopyEventHandlers } from '@/composables/useCopyEventHandlers'
+import { useCurrentWorkspace } from '@/composables/useCurrentWorkspace'
 import { useToaster } from '@/composables/useToaster'
 import { useI18n } from '@/composables/useI18n'
 import { useDocsLink } from '@/composables/useDocsLink'
@@ -41,17 +42,20 @@ const toaster = useToaster()
 const { t } = useI18n()
 const docsLink = useDocsLink(EntityType.Upstream)
 
+const { workspace } = useCurrentWorkspace()
+
 const createRoute = computed(() => {
-  return { name: 'upstream-create' }
+  return { name: 'upstream-create', params: { workspace: workspace.value } }
 })
 
 const getViewRoute = (id: string) => {
-  return { name: 'upstream-detail', params: { id } }
+  return { name: 'upstream-detail', params: { workspace: workspace.value, id } }
 }
 
 const getEditRoute = (id: string) => ({
   name: 'upstream-edit',
   params: {
+    workspace: workspace.value,
     id,
   },
 })

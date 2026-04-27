@@ -36,9 +36,17 @@ export const config = {
   get ADMIN_API_URL() {
     const ADMIN_API_URL = getConfig<string | null>('ADMIN_API_URL', null)
     if (ADMIN_API_URL) {
-      return /^(https?:)?\/\//.test(ADMIN_API_URL)
-        ? ADMIN_API_URL
-        : `${window.location.protocol}//${ADMIN_API_URL}`
+      // 绝对 URL (http://, https://, 协议相对 //)
+      if (/^(https?:)?\/\//.test(ADMIN_API_URL)) {
+        return ADMIN_API_URL
+      }
+      // 路径相对 URL (/api, /v1/api) → 拼接为完整绝对 URL
+      // 避免 entities-shared 的 URL 构建器将 /api 当作路径再次拼接 origin
+      if (ADMIN_API_URL.startsWith('/')) {
+        return `${window.location.origin}${ADMIN_API_URL}`
+      }
+      // 主机名 (admin.example.com)
+      return `${window.location.protocol}//${ADMIN_API_URL}`
     }
 
     const port = window.location.protocol.toLowerCase() === 'https:'

@@ -10,12 +10,14 @@ import { computed, reactive, toRefs } from 'vue'
 import { useRoute } from 'vue-router'
 import { PluginSelect } from '@kong-ui-public/entities-plugins'
 import { useBaseGeneralConfig } from '@/composables/useBaseGeneralConfig'
+import { useCurrentWorkspace } from '@/composables/useCurrentWorkspace'
 
 defineOptions({
   name: 'PluginSelect',
 })
 
 const route = useRoute()
+const { workspace } = useCurrentWorkspace()
 
 const entityScope = computed(() => {
   if (route.query.serviceId) {
@@ -45,6 +47,7 @@ const config = reactive({
   getCreateRoute: (plugin: string) => ({
     name: 'plugin-create',
     params: {
+      workspace: workspace.value,
       pluginType: plugin,
     },
     query: route.query,

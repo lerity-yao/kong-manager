@@ -12,11 +12,12 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from '@/composables/useI18n'
+import { useCurrentWorkspace } from '@/composables/useCurrentWorkspace'
 
 const props = defineProps({
   entity: {
     type: String,
-    required: true,
+    required: false,
     default: '',
   },
   routeOptions: {
@@ -28,11 +29,12 @@ const props = defineProps({
 
 const route = useRoute()
 const { t } = useI18n()
+const { workspace } = useCurrentWorkspace()
 
 const editPath = computed(() => {
   return {
     name: `${props.entity}-edit`,
-    params: { id: route.params.id },
+    params: { workspace: workspace.value, id: route.params.id },
     ...props.routeOptions,
   }
 })

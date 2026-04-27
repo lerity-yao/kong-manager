@@ -27,6 +27,7 @@ import { computed, reactive } from 'vue'
 import { KeySetList, type EntityRow } from '@kong-ui-public/entities-key-sets'
 import type { FilterSchema } from '@kong-ui-public/entities-shared'
 import { useListGeneralConfig } from '@/composables/useListGeneralConfig'
+import { useCurrentWorkspace } from '@/composables/useCurrentWorkspace'
 import { useToaster } from '@/composables/useToaster'
 import { useCopyEventHandlers } from '@/composables/useCopyEventHandlers'
 import { useI18n } from '@/composables/useI18n'
@@ -41,6 +42,8 @@ const toaster = useToaster()
 const { t } = useI18n()
 const docsLink = useDocsLink(EntityType.KeySet)
 
+const { workspace } = useCurrentWorkspace()
+
 const filterSchema = computed<FilterSchema>(() => {
   return {
     name: { type: 'text' },
@@ -48,12 +51,13 @@ const filterSchema = computed<FilterSchema>(() => {
 })
 
 const createRoute = computed(() => {
-  return { name: 'key-set-create' }
+  return { name: 'key-set-create', params: { workspace: workspace.value } }
 })
 
 const getViewRoute = computed(() => (id: string) => ({
   name: 'key-set-detail',
   params: {
+    workspace: workspace.value,
     id,
   },
 }))
@@ -61,6 +65,7 @@ const getViewRoute = computed(() => (id: string) => ({
 const getEditRoute = computed(() => (id: string) => ({
   name: 'key-set-edit',
   params: {
+    workspace: workspace.value,
     id,
   },
 }))

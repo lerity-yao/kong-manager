@@ -15,6 +15,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { RouteForm, type RouteFlavors } from '@kong-ui-public/entities-routes'
 import { useFormGeneralConfig } from '@/composables/useFormGeneralConfig'
 import { useFormRedirectOnCancel, useFormRedirectOnUpdate } from '@/composables/useFormRedirect'
+import { useCurrentWorkspace } from '@/composables/useCurrentWorkspace'
 import { useToaster } from '@/composables/useToaster'
 import { useI18n } from '@/composables/useI18n'
 import { useInfoStore } from '@/stores/info'
@@ -26,6 +27,7 @@ defineOptions({
 
 const route = useRoute()
 const router = useRouter()
+const { workspace } = useCurrentWorkspace()
 const toaster = useToaster()
 const { t } = useI18n()
 
@@ -42,8 +44,8 @@ const isEditing = computed(() => !!id.value)
 
 const routeOnCancel = useFormRedirectOnCancel(
   isEditing.value
-    ? { name: 'route-detail', params: { id: id.value } }
-    : { name: 'route-list' },
+    ? { name: 'route-detail', params: { workspace: workspace.value, id: id.value } }
+    : { name: 'route-list', params: { workspace: workspace.value } },
 )
 
 const routeOnUpdate = useFormRedirectOnUpdate()
@@ -54,7 +56,7 @@ const routeFormConfig = reactive({
 })
 
 const handleUpdate = (entity) => {
-  router.push(routeOnUpdate || { name: 'route-detail', params: { id: entity.id ?? '' } })
+  router.push(routeOnUpdate || { name: 'route-detail', params: { workspace: workspace.value, id: entity.id ?? '' } })
   toaster.open({
     appearance: 'success',
     message: t(

@@ -15,6 +15,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { VaultForm } from '@kong-ui-public/entities-vaults'
 import { useFormGeneralConfig } from '@/composables/useFormGeneralConfig'
 import { useFormRedirectOnCancel } from '@/composables/useFormRedirect'
+import { useCurrentWorkspace } from '@/composables/useCurrentWorkspace'
 import { useToaster } from '@/composables/useToaster'
 import { useI18n } from '@/composables/useI18n'
 import { useGatewayFeatureSupported } from '@/composables/useGatewayFeatureSupported'
@@ -25,6 +26,7 @@ defineOptions({
 
 const route = useRoute()
 const router = useRouter()
+const { workspace } = useCurrentWorkspace()
 const toaster = useToaster()
 const { t } = useI18n()
 
@@ -33,8 +35,8 @@ const isEditing = computed(() => !!id.value)
 
 const routeOnCancel = useFormRedirectOnCancel(
   isEditing.value
-    ? { name: 'vault-detail', params: { id: id.value } }
-    : { name: 'vault-list' },
+    ? { name: 'vault-detail', params: { workspace: workspace.value, id: id.value } }
+    : { name: 'vault-list', params: { workspace: workspace.value } },
 )
 
 const vaultFormConfig = reactive({
@@ -51,7 +53,7 @@ const vaultFormConfig = reactive({
 })
 
 const handleUpdate = (entity) => {
-  router.push({ name: 'vault-detail', params: { id: entity.id || id.value } })
+  router.push({ name: 'vault-detail', params: { workspace: workspace.value, id: entity.id || id.value } })
   toaster.open({
     appearance: 'success',
     message: t(

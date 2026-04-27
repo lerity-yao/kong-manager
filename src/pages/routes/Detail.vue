@@ -34,6 +34,7 @@ import { useDetailGeneralConfig } from '@/composables/useDetailGeneralConfig'
 import { useI18n } from '@/composables/useI18n'
 import { useTabs } from '@/composables/useTabs'
 import { useListRedirect } from '@/composables/useListRedirect'
+import { useCurrentWorkspace } from '@/composables/useCurrentWorkspace'
 import { apiService } from '@/services/apiService'
 
 defineOptions({
@@ -55,6 +56,7 @@ const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
 const { createRedirectRouteQuery } = useListRedirect()
+const { workspace } = useCurrentWorkspace()
 
 const id = computed(() => (route.params.id as string) ?? '')
 const serviceId = computed(() => (route.query.serviceId as string) ?? '')
@@ -73,7 +75,7 @@ const onFetchSuccess = (entity) => {
 const onNavigationClick = (id: string) => {
   router.push({
     name: 'service-detail',
-    params: { id },
+    params: { workspace: workspace.value, id },
     query: createRedirectRouteQuery(),
   })
 }

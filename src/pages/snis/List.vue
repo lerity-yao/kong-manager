@@ -31,6 +31,7 @@ import { useI18n } from '@/composables/useI18n'
 import { useListGeneralConfig } from '@/composables/useListGeneralConfig'
 import { useListRedirect } from '@/composables/useListRedirect'
 import { useToaster } from '@/composables/useToaster'
+import { useCurrentWorkspace } from '@/composables/useCurrentWorkspace'
 import { useDocsLink } from '@/composables/useDocsLink'
 import { EntityType } from '@/types'
 
@@ -39,12 +40,13 @@ defineOptions({
 })
 
 const { createRedirectRouteQuery } = useListRedirect()
+const { workspace } = useCurrentWorkspace()
 const toaster = useToaster()
 const { t } = useI18n()
 const docsLink = useDocsLink(EntityType.SNI)
 
 const createRoute = computed(() => {
-  return { name: 'sni-create' }
+  return { name: 'sni-create', params: { workspace: workspace.value } }
 })
 
 // stub: SNIs do not have detail pages
@@ -52,7 +54,7 @@ const getViewRoute = (_: string) => ({})
 
 const getEditRoute = (id: string) => ({
   name: 'sni-edit',
-  params: { id },
+  params: { workspace: workspace.value, id },
   query: createRedirectRouteQuery(),
 })
 

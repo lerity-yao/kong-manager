@@ -30,9 +30,11 @@ import { useI18n } from '@/composables/useI18n'
 import { useInfoStore } from '@/stores/info'
 import CredentialList from './CredentialList.vue'
 import { useListRedirect } from '@/composables/useListRedirect'
+import { useCurrentWorkspace } from '@/composables/useCurrentWorkspace'
 
 const router = useRouter()
 const { t } = useI18n()
+const { workspace } = useCurrentWorkspace()
 const infoStore = useInfoStore()
 const { createRedirectRouteQuery } = useListRedirect()
 
@@ -59,6 +61,7 @@ const hasEnabledPlugins = computed(() => credentialPlugins.some(({ pluginType })
 const navigateToPluginSelection = () => {
   router.push({
     name: 'plugin-select',
+    params: { workspace: workspace.value },
     query: createRedirectRouteQuery(),
   })
 }
