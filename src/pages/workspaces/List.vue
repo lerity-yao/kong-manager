@@ -36,7 +36,7 @@
             >
               <InfoIcon
                 :size="16"
-                color="rgba(175, 183, 197, 0.5)"
+                color="var(--kui-color-text-neutral, #6c7489)"
                 class="info-icon"
               />
             </KTooltip>
@@ -62,7 +62,7 @@
             >
               <InfoIcon
                 :size="16"
-                color="rgba(175, 183, 197, 0.5)"
+                color="var(--kui-color-text-neutral, #6c7489)"
                 class="info-icon"
               />
             </KTooltip>
@@ -88,7 +88,7 @@
             >
               <InfoIcon
                 :size="16"
-                color="rgba(175, 183, 197, 0.5)"
+                color="var(--kui-color-text-neutral, #6c7489)"
                 class="info-icon"
               />
             </KTooltip>
@@ -114,7 +114,7 @@
             >
               <InfoIcon
                 :size="16"
-                color="rgba(175, 183, 197, 0.5)"
+                color="var(--kui-color-text-neutral, #6c7489)"
                 class="info-icon"
               />
             </KTooltip>
@@ -140,7 +140,7 @@
             >
               <InfoIcon
                 :size="16"
-                color="rgba(175, 183, 197, 0.5)"
+                color="var(--kui-color-text-neutral, #6c7489)"
                 class="info-icon"
               />
             </KTooltip>
@@ -155,25 +155,24 @@
     </div>
   </KCard>
 
-  <div class="workspace-list">
-    <div class="list-toolbar">
-      <KInput
-        v-model="searchQuery"
-        class="workspace-filter"
-        placeholder="Filter Workspaces"
-        type="search"
-      />
-    </div>
+  <KCard class="table-card">
     <KTableData
       :fetcher="fetcher"
       :headers="headers"
-      :search-input="searchQuery"
+      :search-input="debouncedSearchQuery"
       :fetcher-cache-key="fetcherCacheKey"
       :client-sort="true"
       :sort-handler-function="sortHandler"
-      :hide-toolbar="true"
       @row:click="onRowClick"
     >
+      <template #toolbar>
+        <KInput
+          v-model="searchQuery"
+          class="workspace-filter"
+          placeholder="Filter Workspaces"
+          type="search"
+        />
+      </template>
       <template #name="{ rowValue }">
         <div class="workspace-name-cell">
           <div class="workspace-avatar">
@@ -203,14 +202,15 @@
         {{ formatTime(rowValue) }}
       </template>
     </KTableData>
-  </div>
+  </KCard>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { KTableData, KInput, KButton, KCard, KTooltip } from '@kong/kongponents'
 import { InfoIcon } from '@kong/icons'
+import { debounce } from 'lodash-es'
 
 import { useWorkspaceStore } from '@/stores/workspace'
 import { useI18n } from '@/composables/useI18n'
@@ -226,6 +226,12 @@ const { t } = useI18n() as any
 const workspaceStore = useWorkspaceStore()
 
 const searchQuery = ref('')
+const debouncedSearchQuery = ref('')
+
+// 防抖：输入停止 300ms 后才更新过滤词
+watch(searchQuery, debounce((val: string) => {
+  debouncedSearchQuery.value = val
+}, 300))
 
 const headers = [
   { key: 'name', label: 'Workspace Name', sortable: true },
@@ -238,7 +244,7 @@ const headers = [
 ]
 
 // fetcherCacheKey 变化时强制重新请求
-const fetcherCacheKey = computed(() => `workspaces-${searchQuery.value}`)
+const fetcherCacheKey = computed(() => `workspaces-${debouncedSearchQuery.value}`)
 
 // 合计所有 workspace 的 counters
 const totalCounters = computed(() => {
@@ -342,13 +348,15 @@ const onRowClick = (_e: PointerEvent, row: any) => {
 }
 
 .metric-title-text {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--kui-color-text-disabled, #6c7a89);
+  font-size: var(--kui-font-size-30, 13px);
+  line-height: var(--kui-line-height-30, 20px);
+  font-weight: var(--kui-font-weight-semibold, 600);
+  color: var(--kui-color-text, #000);
 }
 
 .info-icon {
   cursor: pointer;
+  color: var(--kui-color-text-neutral, #6c7489);
 }
 
 .metric-value-text {
@@ -393,10 +401,7 @@ const onRowClick = (_e: PointerEvent, row: any) => {
   min-width: 240px;
 }
 
-.list-toolbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
+.table-card {
+  margin-bottom: 24px;
 }
 </style>

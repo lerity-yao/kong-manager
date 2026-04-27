@@ -8,12 +8,14 @@ export const useBaseGeneralConfig = () => {
   const infoStore = useInfoStore()
   const route = useRoute()
 
-  // OSS 后端不支持 workspace 前缀 API 路径（/default/plugins → 404），
-  // 企业版支持（/default/plugins → 200）。
-  // 前端路由统一用 /:workspace/:entity 格式，API 路径按版本区分。
+  // 二期：后端已实现 /workspaces/:workspace_name/:entity 路由
+  // entities-shared 库将 /{workspace}/services 替换为 /${config.workspace}/services
+  // 所以 workspace 值需要是 "workspaces/default" 才能生成 /workspaces/default/services
   const workspaceForApi = computed(() => {
     const wsFromRoute = (route.params.workspace as string) || ''
-    return infoStore.kongEdition === 'enterprise' ? wsFromRoute : ''
+    // OSS 二开: workspace="workspaces/default" → /workspaces/default/services
+    // 企业版: workspace="default" → /default/services (企业版路由格式)
+    return infoStore.kongEdition === 'enterprise' ? wsFromRoute : (wsFromRoute ? `workspaces/${wsFromRoute}` : '')
   })
 
   return reactive({
