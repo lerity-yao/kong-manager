@@ -2,6 +2,12 @@
   <AppLayout
     :sidebar-top-items="sidebarItems"
   >
+    <template #sidebar-icon-Workspaces>
+      <OverviewIcon />
+    </template>
+    <template #sidebar-icon-About>
+      <InfoIcon />
+    </template>
     <template #navbar-right>
       <LanguageSwitcher />
       <GithubStar url="https://github.com/kong/kong" />
@@ -17,6 +23,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { OverviewIcon, InfoIcon } from '@kong/icons'
 import { AppLayout, type SidebarPrimaryItem } from '@kong-ui-public/app-layout'
 import { GithubStar } from '@kong-ui-public/misc-widgets'
 import { useWorkspaceStore } from '@/stores/workspace'

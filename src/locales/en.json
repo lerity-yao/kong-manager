@@ -13,11 +13,18 @@
   "about": {
     "title": "About",
     "config": {
-      "title": "Configuration Details",
-      "copy": "Copy Configuration JSON"
+      "title": "Config Details",
+      "description": "Full Kong node configuration in JSON format.",
+      "copy": "Copy Config JSON",
+      "copied": "Copied!",
+      "copyFailed": "Copy failed"
     },
     "reference": {
-      "title": "Configuration Reference"
+      "title": "Config Reference Docs",
+      "description": "Full reference for all Kong configuration parameters."
+    },
+    "resources": {
+      "title": "Resources"
     }
   },
   "workspaces": {

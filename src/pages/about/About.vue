@@ -28,10 +28,10 @@
   </section>
 
   <!-- Config Details：完整 JSON 配置 + Copy 按钮 -->
-  <KCard title="Config Details">
+  <KCard :title="t('about.config.title')">
     <div class="config-json-header">
       <p class="config-json-desc">
-        Full Kong node configuration in JSON format.
+        {{ t('about.config.description') }}
       </p>
       <KButton
         appearance="secondary"
@@ -52,7 +52,7 @@
 
   <!-- Config Reference Docs 链接 -->
   <KCard
-    title="Resources"
+    :title="t('about.resources.title')"
     class="resource-card"
   >
     <ul class="resource-list">
@@ -211,19 +211,19 @@ const configJson = computed(() => {
   }
 })
 
-const copyBtnText = ref('Copy Config JSON')
+const copyBtnText = ref(t('about.config.copy'))
 
 async function copyConfigJson() {
   try {
     await navigator.clipboard.writeText(configJson.value)
-    copyBtnText.value = 'Copied!'
+    copyBtnText.value = t('about.config.copied')
     setTimeout(() => {
-      copyBtnText.value = 'Copy Config JSON'
+      copyBtnText.value = t('about.config.copy')
     }, 2000)
   } catch {
-    copyBtnText.value = 'Copy failed'
+    copyBtnText.value = t('about.config.copyFailed')
     setTimeout(() => {
-      copyBtnText.value = 'Copy Config JSON'
+      copyBtnText.value = t('about.config.copy')
     }, 2000)
   }
 }
@@ -251,8 +251,8 @@ const resources = computed(() => [
   {
     link: `https://docs.konghq.com/gateway/${version.value}/reference/configuration`,
     icon: BookIcon,
-    title: 'Config Reference Docs',
-    description: 'Full reference for all Kong configuration parameters.',
+    title: t('about.reference.title'),
+    description: t('about.reference.description'),
   },
   {
     link: 'https://discuss.konghq.com/',
