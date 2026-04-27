@@ -5,7 +5,7 @@
       size="medium"
       @click="router.push({ name: 'workspace-create' })"
     >
-      New Workspace
+      {{ t('workspaces.list.new') }}
     </KButton>
     <template #below-title>
       <SupportText>
@@ -17,7 +17,7 @@
   <!-- Summary 指标卡片 - 对齐企业版水平布局 -->
   <KCard
     class="summary-card"
-    title="Summary"
+    :title="t('workspaces.detail.summary.title')"
   >
     <div class="summary-view">
       <div class="summary-view-metrics">
@@ -27,10 +27,10 @@
         >
           <div class="metric-title">
             <div class="metric-title-text">
-              Services
+              {{ t('workspaces.detail.summary.services') }}
             </div>
             <KTooltip
-              text="The total number of Gateway Services configured in the Kong node."
+              :text="t('workspaces.detail.summary.tooltip.services_global')"
               placement="top"
               :max-width="240"
             >
@@ -53,10 +53,10 @@
         >
           <div class="metric-title">
             <div class="metric-title-text">
-              Routes
+              {{ t('workspaces.detail.summary.routes') }}
             </div>
             <KTooltip
-              text="The total number of Routes configured in the Kong node."
+              :text="t('workspaces.detail.summary.tooltip.routes_global')"
               placement="top"
               :max-width="240"
             >
@@ -79,10 +79,10 @@
         >
           <div class="metric-title">
             <div class="metric-title-text">
-              Consumers
+              {{ t('workspaces.detail.summary.consumers') }}
             </div>
             <KTooltip
-              text="The total number of Consumers configured in the Kong node."
+              :text="t('workspaces.detail.summary.tooltip.consumers_global')"
               placement="top"
               :max-width="240"
             >
@@ -105,10 +105,10 @@
         >
           <div class="metric-title">
             <div class="metric-title-text">
-              Plugins
+              {{ t('workspaces.detail.summary.plugins') }}
             </div>
             <KTooltip
-              text="The total number of unique Plugin configurations in the Kong node."
+              :text="t('workspaces.detail.summary.tooltip.plugins_global')"
               placement="top"
               :max-width="240"
             >
@@ -131,10 +131,10 @@
         >
           <div class="metric-title">
             <div class="metric-title-text">
-              API Requests
+              {{ t('workspaces.detail.summary.api_requests') }}
             </div>
             <KTooltip
-              text="The total number of API requests proxied by the Kong node. (Enterprise only)"
+              :text="t('workspaces.detail.summary.tooltip.api_requests')"
               placement="top"
               :max-width="240"
             >
@@ -169,7 +169,7 @@
         <KInput
           v-model="searchQuery"
           class="workspace-filter"
-          placeholder="Filter Workspaces"
+          :placeholder="t('workspaces.list.filter')"
           type="search"
         />
       </template>
@@ -233,15 +233,15 @@ watch(searchQuery, debounce((val: string) => {
   debouncedSearchQuery.value = val
 }, 300))
 
-const headers = [
-  { key: 'name', label: 'Workspace Name', sortable: true },
-  { key: 'comment', label: 'Comment' },
-  { key: 'services', label: 'Gateway Services' },
-  { key: 'consumers', label: 'Consumers' },
-  { key: 'routes', label: 'Routes' },
-  { key: 'created_at', label: 'Created At', sortable: true },
-  { key: 'updated_at', label: 'Updated At', sortable: true },
-]
+const headers = computed(() => [
+  { key: 'name', label: t('workspaces.list.headers.name'), sortable: true },
+  { key: 'comment', label: t('workspaces.list.headers.comment') },
+  { key: 'services', label: t('workspaces.list.headers.services') },
+  { key: 'consumers', label: t('workspaces.list.headers.consumers') },
+  { key: 'routes', label: t('workspaces.list.headers.routes') },
+  { key: 'created_at', label: t('workspaces.list.headers.created_at'), sortable: true },
+  { key: 'updated_at', label: t('workspaces.list.headers.updated_at'), sortable: true },
+])
 
 // fetcherCacheKey 变化时强制重新请求
 const fetcherCacheKey = computed(() => `workspaces-${debouncedSearchQuery.value}`)

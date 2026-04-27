@@ -20,7 +20,7 @@
         <KInput
           id="ws-name"
           v-model="form.name"
-          placeholder="my-workspace"
+          :placeholder="t('workspaces.create.name_placeholder')"
           required
         />
       </div>
@@ -31,7 +31,7 @@
         <KInput
           id="ws-comment"
           v-model="form.comment"
-          placeholder="Optional description"
+          :placeholder="t('workspaces.create.comment_placeholder')"
         />
       </div>
     </EntityFormSection>
@@ -79,7 +79,7 @@ const onSubmit = async () => {
   } catch (err: any) {
     toaster.open({
       appearance: 'danger',
-      message: err?.response?.data?.message || err?.message || 'Failed to create workspace',
+      message: err?.response?.data?.message || err?.message || t('workspaces.create.failed'),
     })
   }
 }

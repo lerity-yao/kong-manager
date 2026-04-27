@@ -24,7 +24,7 @@
     </KCard>
   </section>
   <KCard
-    title="Resources"
+    :title="t('overview.resource.title')"
     class="resource-card"
   >
     <ul class="resource-list">

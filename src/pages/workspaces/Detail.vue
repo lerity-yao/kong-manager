@@ -7,7 +7,7 @@
           <!-- Summary 指标卡片 -->
           <KCard
             class="summary-card"
-            title="Summary"
+            :title="t('workspaces.detail.summary.title')"
           >
             <div class="summary-view">
               <div class="summary-view-metrics">
@@ -17,10 +17,10 @@
                 >
                   <div class="metric-title">
                     <div class="metric-title-text">
-                      Services
+                      {{ t('workspaces.detail.summary.services') }}
                     </div>
                     <KTooltip
-                      text="The total number of Gateway Services configured in this workspace."
+                      :text="t('workspaces.detail.summary.tooltip.services')"
                       placement="top"
                       :max-width="240"
                     >
@@ -43,10 +43,10 @@
                 >
                   <div class="metric-title">
                     <div class="metric-title-text">
-                      Routes
+                      {{ t('workspaces.detail.summary.routes') }}
                     </div>
                     <KTooltip
-                      text="The total number of Routes configured in this workspace."
+                      :text="t('workspaces.detail.summary.tooltip.routes')"
                       placement="top"
                       :max-width="240"
                     >
@@ -69,10 +69,10 @@
                 >
                   <div class="metric-title">
                     <div class="metric-title-text">
-                      Consumers
+                      {{ t('workspaces.detail.summary.consumers') }}
                     </div>
                     <KTooltip
-                      text="The total number of Consumers configured in this workspace."
+                      :text="t('workspaces.detail.summary.tooltip.consumers')"
                       placement="top"
                       :max-width="240"
                     >
@@ -95,10 +95,10 @@
                 >
                   <div class="metric-title">
                     <div class="metric-title-text">
-                      Plugins
+                      {{ t('workspaces.detail.summary.plugins') }}
                     </div>
                     <KTooltip
-                      text="The total number of unique Plugin configurations in this workspace."
+                      :text="t('workspaces.detail.summary.tooltip.plugins')"
                       placement="top"
                       :max-width="240"
                     >
@@ -121,10 +121,10 @@
                 >
                   <div class="metric-title">
                     <div class="metric-title-text">
-                      API Requests
+                      {{ t('workspaces.detail.summary.api_requests') }}
                     </div>
                     <KTooltip
-                      text="The total number of API requests proxied by the Kong node. (Enterprise only)"
+                      :text="t('workspaces.detail.summary.tooltip.api_requests')"
                       placement="top"
                       :max-width="240"
                     >
@@ -148,16 +148,16 @@
           <!-- Workspace 基本信息卡片 -->
           <KCard
             class="info-card"
-            title="Workspace Information"
+            :title="t('workspaces.detail.info.title')"
           >
             <dl class="info-grid">
-              <dt>ID</dt>
+              <dt>{{ t('workspaces.detail.info.id') }}</dt>
               <dd>{{ workspace?.id }}</dd>
-              <dt>Name</dt>
+              <dt>{{ t('workspaces.detail.info.name') }}</dt>
               <dd>{{ workspace?.name }}</dd>
-              <dt>Comment</dt>
+              <dt>{{ t('workspaces.detail.info.comment') }}</dt>
               <dd>{{ workspace?.comment || '-' }}</dd>
-              <dt>Created</dt>
+              <dt>{{ t('workspaces.detail.info.created') }}</dt>
               <dd>{{ formatDate(workspace?.created_at) }}</dd>
             </dl>
           </KCard>
@@ -165,7 +165,7 @@
       </template>
       <template #entities>
         <p class="entity-hint">
-          Workspace entities are accessible via the sidebar menu when this workspace is selected.
+          {{ t('workspaces.detail.entities_hint') }}
         </p>
       </template>
     </KTabs>
@@ -196,10 +196,10 @@ const workspaceCounters = computed(() => {
   return workspace.value?.counters ?? { services: 0, routes: 0, consumers: 0, plugins: 0 }
 })
 
-const tabs = [
-  { hash: '#overview', title: 'Overview' },
-  { hash: '#entities', title: 'Entities' },
-]
+const tabs = computed(() => [
+  { hash: '#overview', title: t('workspaces.detail.tabs.overview') },
+  { hash: '#entities', title: t('workspaces.detail.tabs.entities') },
+])
 
 const formatDate = (timestamp?: number) => {
   if (!timestamp) return '-'

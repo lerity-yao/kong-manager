@@ -13,7 +13,8 @@ import '@/monaco-workers'
 const DEFAULT_LOCALE = 'en-US'
 const LOCALE_MODULES = [
   'Global', 'Workspaces', 'Overview', 'About', 'Services', 'Routes',
-  'Consumers', 'Plugins', 'Upstreams', 'Certificates', 'Vaults', 'Keys', 'Teams', 'RBAC',
+  'Consumers', 'Plugins', 'Upstreams', 'Certificates', 'CA_Certificates', 'SNIs',
+  'Vaults', 'Keys', 'Key_Sets', 'Teams', 'RBAC',
 ]
 
 // 后端模块名 → en.json 中的 key 路径
@@ -29,8 +30,11 @@ const LOCALE_KEY_MAP: Record<string, string> = {
   Plugins: 'entities.plugin',
   Upstreams: 'entities.upstream',
   Certificates: 'entities.certificate',
+  CA_Certificates: 'entities.ca-certificate',
+  SNIs: 'entities.sni',
   Vaults: 'entities.vault',
   Keys: 'entities.key',
+  Key_Sets: 'entities.key-set',
   Teams: 'teams',
   RBAC: 'entities.rbac',
 }
