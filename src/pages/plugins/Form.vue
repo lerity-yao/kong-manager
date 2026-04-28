@@ -3,7 +3,10 @@
     class="plugin-form-header"
     :title="pageTitle"
   >
-    <KExternalLink :href="docsLink">
+    <KExternalLink
+      v-if="docsLink"
+      :href="docsLink"
+    >
       View documentation
     </KExternalLink>
   </PageHeader>
