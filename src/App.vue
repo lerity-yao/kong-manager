@@ -17,7 +17,6 @@
     </template>
     <template #navbar-right>
       <LanguageSwitcher />
-      <GithubStar url="https://github.com/kong/kong" />
       <UserMenu />
     </template>
     <template #sidebar-header>
@@ -33,7 +32,6 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { OverviewIcon, InfoIcon, PeopleIcon } from '@kong/icons'
 import { AppLayout, type SidebarPrimaryItem } from '@kong-ui-public/app-layout'
-import { GithubStar } from '@kong-ui-public/misc-widgets'
 import { useWorkspaceStore } from '@/stores/workspace'
 import { useAuthStore } from '@/stores/auth'
 import { useI18n } from '@/composables/useI18n'
@@ -88,7 +86,7 @@ const sidebarItems = computed<SidebarPrimaryItem[]>(() => {
   // Filter entity items by read permission (strip entityKey before passing to sidebar)
   const permittedEntityItems = allEntityItems
     .filter(item => authStore.hasPermissionGuarded('read', entityEndpointMap[item.entityKey] || `/${item.entityKey}s`))
-    .map(({ entityKey, ...rest }) => rest)
+    .map(({ entityKey: _entityKey, ...rest }) => rest)
 
   // Teams menu: visible only if user has read permission for any Teams endpoint
   const canSeeTeams = authStore.hasPermissionGuarded('read', '/admins')
