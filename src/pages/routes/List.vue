@@ -41,6 +41,7 @@ import { useDocsLink } from '@/composables/useDocsLink'
 import { EntityType } from '@/types'
 import { useInfoStore } from '@/stores/info'
 import { storeToRefs } from 'pinia'
+import { useEntityPermissions } from '@/composables/useEntityPermissions'
 
 defineOptions({ name: 'RouteList' })
 
@@ -124,13 +125,7 @@ const routeListConfig = reactive({
   filterSchema,
 })
 
-const canCreate = async () => true
-
-const canDelete = async () => true
-
-const canEdit = async () => true
-
-const canRetrieve = async () => true
+const { canCreate, canDelete, canEdit, canRetrieve } = useEntityPermissions('/routes')
 
 const { onCopySuccess, onCopyError } = useCopyEventHandlers()
 

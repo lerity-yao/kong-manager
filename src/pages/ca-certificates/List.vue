@@ -32,6 +32,7 @@ import { useCurrentWorkspace } from '@/composables/useCurrentWorkspace'
 import { useToaster } from '@/composables/useToaster'
 import { useDocsLink } from '@/composables/useDocsLink'
 import { EntityType } from '@/types'
+import { useEntityPermissions } from '@/composables/useEntityPermissions'
 
 defineOptions({
   name: 'CACertificateList',
@@ -64,13 +65,7 @@ const caCertificateListConfig = reactive({
   getEditRoute,
 })
 
-const canCreate = async () => true
-
-const canDelete = async () => true
-
-const canEdit = async () => true
-
-const canRetrieve = async () => true
+const { canCreate, canDelete, canEdit, canRetrieve } = useEntityPermissions('/ca_certificates')
 
 const { onCopySuccess, onCopyError } = useCopyEventHandlers()
 

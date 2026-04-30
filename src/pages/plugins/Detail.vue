@@ -20,7 +20,7 @@
       }"
     />
   </PageHeader>
-  <PluginConfigCard
+  <CustomPluginConfigCard
     :config="pluginDetailConfig"
     :scoped-entity-type="entityScope?.typeLiteral"
     :scoped-entity-id="entityScope?.id"
@@ -30,7 +30,8 @@
 <script setup lang="ts">
 import { computed, reactive } from 'vue'
 import { useRoute } from 'vue-router'
-import { PluginConfigCard, PluginIcon } from '@kong-ui-public/entities-plugins'
+import { PluginIcon } from '@kong-ui-public/entities-plugins'
+import CustomPluginConfigCard from '@/components/CustomPluginConfigCard.vue'
 import { useDetailGeneralConfig } from '@/composables/useDetailGeneralConfig'
 import { pluginMeta } from '@/pages/plugins/PluginMeta'
 

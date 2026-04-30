@@ -1,6 +1,7 @@
 <template>
   <PageHeader :title="t('workspaces.list.title')">
     <KButton
+      :disabled="!authStore.hasPermissionGuarded('create', '/workspaces')"
       appearance="primary"
       size="medium"
       @click="router.push({ name: 'workspace-create' })"
@@ -214,6 +215,7 @@ import { debounce } from 'lodash-es'
 
 import { useWorkspaceStore } from '@/stores/workspace'
 import { useI18n } from '@/composables/useI18n'
+import { useAuthStore } from '@/stores/auth'
 import PageHeader from '@/components/PageHeader.vue'
 import SupportText from '@/components/SupportText.vue'
 
@@ -224,6 +226,7 @@ defineOptions({ name: 'WorkspaceList' })
 const router = useRouter()
 const { t } = useI18n() as any
 const workspaceStore = useWorkspaceStore()
+const authStore = useAuthStore()
 
 const searchQuery = ref('')
 const debouncedSearchQuery = ref('')

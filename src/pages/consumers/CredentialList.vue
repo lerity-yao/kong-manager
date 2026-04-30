@@ -31,6 +31,7 @@ import { useCopyEventHandlers } from '@/composables/useCopyEventHandlers'
 import { useCurrentWorkspace } from '@/composables/useCurrentWorkspace'
 import { useToaster } from '@/composables/useToaster'
 import { useI18n } from '@/composables/useI18n'
+import { useEntityPermissions } from '@/composables/useEntityPermissions'
 
 const props = defineProps({
   enabled: {
@@ -94,11 +95,7 @@ const credentialListConfig = reactive({
   getEditRoute,
 })
 
-const canCreate = async () => true
-
-const canDelete = async () => true
-
-const canEdit = async () => true
+const { canCreate, canDelete, canEdit } = useEntityPermissions('/consumers')
 
 const { onCopySuccess, onCopyError } = useCopyEventHandlers()
 

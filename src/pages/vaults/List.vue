@@ -33,6 +33,7 @@ import { useToaster } from '@/composables/useToaster'
 import { useI18n } from '@/composables/useI18n'
 import { useDocsLink } from '@/composables/useDocsLink'
 import { EntityType } from '@/types'
+import { useEntityPermissions } from '@/composables/useEntityPermissions'
 
 defineOptions({
   name: 'VaultList',
@@ -73,13 +74,7 @@ const vaultListConfig = reactive({
   filterSchema,
 })
 
-const canCreate = async () => true
-
-const canDelete = async () => true
-
-const canEdit = async () => true
-
-const canRetrieve = async () => true
+const { canCreate, canDelete, canEdit, canRetrieve } = useEntityPermissions('/vaults')
 
 const { onCopySuccess, onCopyError } = useCopyEventHandlers()
 

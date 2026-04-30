@@ -1,5 +1,9 @@
 <template>
+  <!-- Login page: standalone, no layout -->
+  <router-view v-if="isLoginPage" />
+  <!-- All other pages: with sidebar + navbar -->
   <AppLayout
+    v-else
     :sidebar-top-items="sidebarItems"
   >
     <template #sidebar-icon-Workspaces>
@@ -8,9 +12,13 @@
     <template #sidebar-icon-About>
       <InfoIcon />
     </template>
+    <template #sidebar-icon-Teams>
+      <PeopleIcon />
+    </template>
     <template #navbar-right>
       <LanguageSwitcher />
       <GithubStar url="https://github.com/kong/kong" />
+      <UserMenu />
     </template>
     <template #sidebar-header>
       <NavbarLogo />
@@ -23,26 +31,73 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { OverviewIcon, InfoIcon } from '@kong/icons'
+import { OverviewIcon, InfoIcon, PeopleIcon } from '@kong/icons'
 import { AppLayout, type SidebarPrimaryItem } from '@kong-ui-public/app-layout'
 import { GithubStar } from '@kong-ui-public/misc-widgets'
 import { useWorkspaceStore } from '@/stores/workspace'
+import { useAuthStore } from '@/stores/auth'
 import { useI18n } from '@/composables/useI18n'
 import NavbarLogo from '@/components/NavbarLogo.vue'
 import MakeAWish from '@/components/MakeAWish.vue'
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue'
+import UserMenu from '@/components/UserMenu.vue'
 
 const route = useRoute()
 const workspaceStore = useWorkspaceStore()
+const authStore = useAuthStore()
 const { t } = useI18n()
+
+const isLoginPage = computed(() => route.name === 'login')
+
+// Entity type → endpoint mapping for permission checks
+const entityEndpointMap: Record<string, string> = {
+  'workspace-overview': '/workspaces',
+  service: '/services',
+  route: '/routes',
+  consumer: '/consumers',
+  plugin: '/plugins',
+  upstream: '/upstreams',
+  certificate: '/certificates',
+  'ca-certificate': '/ca_certificates',
+  sni: '/snis',
+  key: '/keys',
+  vault: '/vaults',
+  'key-set': '/key-sets',
+}
 
 const sidebarItems = computed<SidebarPrimaryItem[]>(() => {
   const wsName = (route.params.workspace as string) || 'default'
   const isInWorkspace = !!route.params.workspace || route.name === 'workspace-overview'
 
-  return [
-    // Workspaces: 企业版逻辑 — 未选 workspace 时只显示 workspace 列表，
-    // 选中后在 Workspaces 内部显示 workspace 名 + 实体子菜单
+  // Build workspace entity sub-menus with permission filtering
+  const allEntityItems = [
+    { name: t('overview.resource.intro.title'), to: { name: 'workspace-overview', params: { workspace: wsName } }, active: route.name === 'workspace-overview', entityKey: 'workspace-overview' },
+    { name: t('entities.service.list.title'), to: { name: 'service-list', params: { workspace: wsName } }, active: route.meta?.entity === 'service', entityKey: 'service' },
+    { name: t('entities.route.list.title'), to: { name: 'route-list', params: { workspace: wsName } }, active: route.meta?.entity === 'route', entityKey: 'route' },
+    { name: t('entities.consumer.list.title'), to: { name: 'consumer-list', params: { workspace: wsName } }, active: route.meta?.entity === 'consumer', entityKey: 'consumer' },
+    { name: t('entities.plugin.list.title'), to: { name: 'plugin-list', params: { workspace: wsName } }, active: route.meta?.entity === 'plugin', entityKey: 'plugin' },
+    { name: t('entities.upstream.list.title'), to: { name: 'upstream-list', params: { workspace: wsName } }, active: route.meta?.entity === 'upstream', entityKey: 'upstream' },
+    { name: t('entities.certificate.list.title'), to: { name: 'certificate-list', params: { workspace: wsName } }, active: route.meta?.entity === 'certificate', entityKey: 'certificate' },
+    { name: t('entities.ca-certificate.list.title'), to: { name: 'ca-certificate-list', params: { workspace: wsName } }, active: route.meta?.entity === 'ca-certificate', entityKey: 'ca-certificate' },
+    { name: t('entities.sni.list.title'), to: { name: 'sni-list', params: { workspace: wsName } }, active: route.meta?.entity === 'sni', entityKey: 'sni' },
+    { name: t('entities.key.list.title'), to: { name: 'key-list', params: { workspace: wsName } }, active: route.meta?.entity === 'key', entityKey: 'key' },
+    { name: t('entities.vault.list.title'), to: { name: 'vault-list', params: { workspace: wsName } }, active: route.meta?.entity === 'vault', entityKey: 'vault' },
+    { name: t('entities.key-set.list.title'), to: { name: 'key-set-list', params: { workspace: wsName } }, active: route.meta?.entity === 'key-set', entityKey: 'key-set' },
+  ]
+
+  // Filter entity items by read permission (strip entityKey before passing to sidebar)
+  const permittedEntityItems = allEntityItems
+    .filter(item => authStore.hasPermissionGuarded('read', entityEndpointMap[item.entityKey] || `/${item.entityKey}s`))
+    .map(({ entityKey, ...rest }) => rest)
+
+  // Teams menu: visible only if user has read permission for any Teams endpoint
+  const canSeeTeams = authStore.hasPermissionGuarded('read', '/admins')
+    || authStore.hasPermissionGuarded('read', '/rbac/users')
+    || authStore.hasPermissionGuarded('read', '/rbac/groups')
+    || authStore.hasPermissionGuarded('read', '/rbac/roles')
+
+  const items: SidebarPrimaryItem[] = [
+    // Workspaces
     {
       name: t('workspaces.title'),
       to: { name: 'workspaces' },
@@ -51,35 +106,33 @@ const sidebarItems = computed<SidebarPrimaryItem[]>(() => {
       expanded: isInWorkspace,
       ...(isInWorkspace ? { label: wsName } : {}),
       items: isInWorkspace
-        ? [
-          // 实体子菜单
-          { name: t('overview.resource.intro.title'), to: { name: 'workspace-overview', params: { workspace: wsName } }, active: route.name === 'workspace-overview' },
-          { name: t('entities.service.list.title'), to: { name: 'service-list', params: { workspace: wsName } }, active: route.meta?.entity === 'service' },
-          { name: t('entities.route.list.title'), to: { name: 'route-list', params: { workspace: wsName } }, active: route.meta?.entity === 'route' },
-          { name: t('entities.consumer.list.title'), to: { name: 'consumer-list', params: { workspace: wsName } }, active: route.meta?.entity === 'consumer' },
-          { name: t('entities.plugin.list.title'), to: { name: 'plugin-list', params: { workspace: wsName } }, active: route.meta?.entity === 'plugin' },
-          { name: t('entities.upstream.list.title'), to: { name: 'upstream-list', params: { workspace: wsName } }, active: route.meta?.entity === 'upstream' },
-          { name: t('entities.certificate.list.title'), to: { name: 'certificate-list', params: { workspace: wsName } }, active: route.meta?.entity === 'certificate' },
-          { name: t('entities.ca-certificate.list.title'), to: { name: 'ca-certificate-list', params: { workspace: wsName } }, active: route.meta?.entity === 'ca-certificate' },
-          { name: t('entities.sni.list.title'), to: { name: 'sni-list', params: { workspace: wsName } }, active: route.meta?.entity === 'sni' },
-          { name: t('entities.key.list.title'), to: { name: 'key-list', params: { workspace: wsName } }, active: route.meta?.entity === 'key' },
-          { name: t('entities.vault.list.title'), to: { name: 'vault-list', params: { workspace: wsName } }, active: route.meta?.entity === 'vault' },
-          { name: t('entities.key-set.list.title'), to: { name: 'key-set-list', params: { workspace: wsName } }, active: route.meta?.entity === 'key-set' },
-        ]
+        ? permittedEntityItems
         : workspaceStore.workspaces.map(ws => ({
           name: ws.name,
           to: { name: 'workspace-overview', params: { workspace: ws.name } },
         })),
     },
-
-    // About
-    {
-      name: t('about.title'),
-      to: { name: 'about' },
-      key: 'About',
-      active: route.name === 'about',
-    },
   ]
+
+  // Teams (conditionally added)
+  if (canSeeTeams) {
+    items.push({
+      name: 'Teams',
+      to: { name: 'teams' },
+      key: 'Teams',
+      active: route.path?.startsWith('/teams'),
+    })
+  }
+
+  // About (always visible)
+  items.push({
+    name: t('about.title'),
+    to: { name: 'about' },
+    key: 'About',
+    active: route.name === 'about',
+  })
+
+  return items
 })
 </script>
 

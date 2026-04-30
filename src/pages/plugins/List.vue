@@ -41,6 +41,7 @@ import { useToaster } from '@/composables/useToaster'
 import { useI18n } from '@/composables/useI18n'
 import { useDocsLink } from '@/composables/useDocsLink'
 import { EntityType } from '@/types'
+import { useEntityPermissions } from '@/composables/useEntityPermissions'
 
 defineOptions({
   name: 'PluginList',
@@ -140,18 +141,12 @@ const pluginListConfig = reactive({
   filterSchema,
 })
 
-const canCreate = async () => true
-
-const canDelete = async () => true
-
-const canEdit = async () => true
+const { canCreate, canDelete, canEdit, canRetrieve } = useEntityPermissions('/plugins')
 
 // konnect has a special tag for this permission
 // set to always true since Kong Manager doesn't have such limitation
 // `@kong-ui-public/entites-plugins` will check `canEdit` internally so we don't need to check it here
 const canToggle = async () => true
-
-const canRetrieve = async () => true
 
 const canRetrieveScopedEntity = async () => true
 

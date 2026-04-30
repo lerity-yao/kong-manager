@@ -1,0 +1,477 @@
+{
+  "global": {
+    "copied": "已复制到剪贴板",
+    "error": "发生错误，请重试",
+    "buttons": {
+      "back": "返回",
+      "edit": "编辑",
+      "save": "保存",
+      "create": "创建"
+    },
+    "learn.more": "了解更多"
+  },
+  "about": {
+    "title": "关于",
+    "config": {
+      "title": "配置详情",
+      "description": "Kong 节点完整配置（JSON 格式）。",
+      "copy": "复制配置 JSON",
+      "copied": "已复制！",
+      "copyFailed": "复制失败"
+    },
+    "reference": {
+      "title": "配置参考文档",
+      "description": "Kong 所有配置参数的完整参考。"
+    },
+    "resources": {
+      "title": "资源"
+    }
+  },
+  "workspaces": {
+    "title": "工作空间",
+    "create": {
+      "title": "新建工作空间",
+      "name": "名称",
+      "name_placeholder": "my-workspace",
+      "comment": "备注",
+      "comment_placeholder": "可选描述",
+      "failed": "创建工作空间失败",
+      "section": {
+        "general": "基本信息",
+        "general.description": "基本信息有助于识别和管理此工作空间。"
+      }
+    },
+    "edit": {
+      "title": "编辑工作空间：{name}"
+    },
+    "list": {
+      "title": "工作空间",
+      "new": "新建工作空间",
+      "filter": "筛选工作空间",
+      "empty": {
+        "title": "暂无工作空间",
+        "message": "创建工作空间以组织您的 Kong 实体。"
+      },
+      "headers": {
+        "name": "工作空间名称",
+        "comment": "备注",
+        "services": "网关服务",
+        "consumers": "消费者",
+        "routes": "路由",
+        "created_at": "创建时间",
+        "updated_at": "更新时间"
+      }
+    },
+    "detail": {
+      "title": "工作空间：{name}",
+      "tabs": {
+        "overview": "概览",
+        "entities": "实体"
+      },
+      "summary": {
+        "title": "概要",
+        "services": "服务",
+        "routes": "路由",
+        "consumers": "消费者",
+        "plugins": "插件",
+        "api_requests": "API 请求数",
+        "tooltip": {
+          "services": "此工作空间中配置的网关服务总数。",
+          "routes": "此工作空间中配置的路由总数。",
+          "consumers": "此工作空间中配置的消费者总数。",
+          "plugins": "此工作空间中唯一的插件配置总数。",
+          "api_requests": "Kong 节点代理的 API 请求总数。（企业版功能）",
+          "services_global": "Kong 节点中配置的网关服务总数。",
+          "routes_global": "Kong 节点中配置的路由总数。",
+          "consumers_global": "Kong 节点中配置的消费者总数。",
+          "plugins_global": "Kong 节点中唯一的插件配置总数。"
+        }
+      },
+      "info": {
+        "title": "工作空间信息",
+        "id": "ID",
+        "name": "名称",
+        "comment": "备注",
+        "created": "创建时间"
+      },
+      "entities_hint": "选择此工作空间后，可通过侧边栏菜单访问工作空间实体。"
+    },
+    "created": "工作空间「{name}」创建成功！",
+    "updated": "工作空间「{name}」更新成功！",
+    "deleted": "工作空间「{name}」删除成功！"
+  },
+  "overview": {
+    "info": {
+      "gateway": {
+        "title": "网关",
+        "edition": "版本类型",
+        "version": "版本号"
+      },
+      "node": {
+        "title": "节点详情",
+        "address": "地址",
+        "hostname": "主机名"
+      },
+      "port": {
+        "title": "端口详情",
+        "port": "Kong Manager 端口",
+        "ssl": "Kong Manager SSL 端口",
+        "proxy": "代理端口",
+        "proxy.ssl": "代理 SSL 端口"
+      },
+      "datastore": {
+        "title": "数据存储",
+        "type": "类型",
+        "user": "用户",
+        "host": "主机",
+        "port": "端口",
+        "ssl": "SSL"
+      }
+    },
+    "resource": {
+      "title": "资源",
+      "intro": {
+        "title": "简介",
+        "description": "轻量、快速、灵活的云原生 API 网关。"
+      },
+      "start": {
+        "title": "快速入门",
+        "description": "Kong 新手？从基础知识开始。"
+      },
+      "plugin": {
+        "title": "插件中心",
+        "description": "使用强大的插件扩展 Kong 网关。"
+      },
+      "discuss": {
+        "title": "社区讨论",
+        "description": "与其他用户讨论 Kong。"
+      }
+    }
+  },
+  "not-found": {
+    "description": "找不到您要的页面。请返回上一页或前往{overview}。"
+  },
+  "konnect-cta": {
+    "name": "Konnect",
+    "description": "最简单的 Kong 网关入门方式。",
+    "get.started": "立即开始",
+    "footer.description": "无需信用卡，提供免费方案",
+    "feature.1": "使用 Konnect 的 SaaS 控制面简化网关运维",
+    "feature.2": "试用企业级插件，如 OpenID Connect、mTLS 和 OPA",
+    "feature.3": "开箱即用的 API 分析",
+    "feature.4": "简化 Kong 网关升级",
+    "feature.5": "部署带注册管理的 API 开发者门户"
+  },
+  "entities": {
+    "service": {
+      "description": "网关服务实体是上游服务的抽象，例如数据转换微服务、计费 API 等。",
+      "created": "网关服务「{name}」创建成功！",
+      "updated": "网关服务「{name}」更新成功！",
+      "deleted": "网关服务「{name}」删除成功！",
+      "list.title": "网关服务",
+      "detail.title": "网关服务：{name}",
+      "create.form.title": "新建网关服务",
+      "edit.form.title": "编辑网关服务"
+    },
+    "route": {
+      "description": "路由定义了匹配客户端请求的规则，并关联到服务。",
+      "created": "路由「{name}」创建成功！",
+      "updated": "路由「{name}」更新成功！",
+      "deleted": "路由「{name}」删除成功！",
+      "list.title": "路由",
+      "detail.title": "路由：{name}",
+      "create.form.title": "新建路由",
+      "edit.form.title": "编辑路由"
+    },
+    "consumer": {
+      "description": "消费者是服务的最终用户。",
+      "created": "消费者「{name}」创建成功！",
+      "updated": "消费者「{name}」更新成功！",
+      "deleted": "消费者「{name}」删除成功！",
+      "list.title": "消费者",
+      "detail.title": "消费者：{name}",
+      "create.form.title": "新建消费者",
+      "edit.form.title": "编辑消费者"
+    },
+    "consumer-credential": {
+      "created": "凭证创建成功！",
+      "updated": "凭证更新成功！",
+      "deleted": "凭证删除成功！",
+      "empty": {
+        "title": "无可用插件",
+        "message": "添加以下插件之一以启用此消费者的凭证功能：{plugins}",
+        "button": "安装插件"
+      },
+      "create.form.title": "创建：{type}",
+      "edit.form.title": "编辑：{type}"
+    },
+    "plugin": {
+      "description": "插件可扩展 Kong 的功能，如限流、认证和日志等。",
+      "created": "插件「{name}」创建成功！",
+      "updated": "插件「{name}」更新成功！",
+      "deleted": "插件「{name}」删除成功！",
+      "enabled": "插件「{name}」已启用！",
+      "disabled": "插件「{name}」已禁用！",
+      "list.title": "插件",
+      "create.form.title": "新建插件",
+      "edit.form.title": "编辑插件"
+    },
+    "upstream": {
+      "description": "Upstream 代表一个虚拟主机名，可用于对多个服务进行负载均衡。",
+      "created": "Upstream「{name}」创建成功！",
+      "updated": "Upstream「{name}」更新成功！",
+      "deleted": "Upstream「{name}」删除成功！",
+      "list.title": "Upstreams",
+      "detail.title": "Upstream：{name}",
+      "create.form.title": "新建 Upstream",
+      "edit.form.title": "编辑 Upstream"
+    },
+    "certificate": {
+      "description": "证书用于处理加密请求的 SSL/TLS 终止。",
+      "created": "证书「{id}」创建成功！",
+      "updated": "证书「{id}」更新成功！",
+      "deleted": "证书「{id}」删除成功！",
+      "list.title": "证书",
+      "detail.title": "证书：{id}",
+      "create.form.title": "新建证书",
+      "edit.form.title": "编辑证书"
+    },
+    "ca-certificate": {
+      "description": "CA 证书用于验证客户端或服务器证书。",
+      "created": "CA 证书「{id}」创建成功！",
+      "updated": "CA 证书「{id}」更新成功！",
+      "deleted": "CA 证书「{id}」删除成功！",
+      "list.title": "CA 证书",
+      "detail.title": "CA 证书：{id}",
+      "create.form.title": "新建 CA 证书",
+      "edit.form.title": "编辑 CA 证书"
+    },
+    "sni": {
+      "description": "SNI 对象表示主机名到证书的多对一映射。",
+      "created": "SNI「{name}」创建成功！",
+      "updated": "SNI「{name}」更新成功！",
+      "deleted": "SNI「{name}」删除成功！",
+      "list.title": "SNI",
+      "detail.title": "SNI：{name}",
+      "create.form.title": "新建 SNI",
+      "edit.form.title": "编辑 SNI"
+    },
+    "target": {
+      "created": "目标「{name}」创建成功！",
+      "updated": "目标「{name}」更新成功！",
+      "deleted": "目标「{name}」删除成功！",
+      "marked.as.healthy": "目标已标记为健康！",
+      "marked.as.unhealthy": "目标已标记为不健康！",
+      "list.title": "目标",
+      "detail.title": "目标：{name}",
+      "create.form.title": "新建目标",
+      "edit.form.title": "编辑目标"
+    },
+    "vault": {
+      "description": "使用集中式密钥管理提高 Kong 网关部署的安全性。",
+      "created": "Vault「{name}」创建成功！",
+      "updated": "Vault「{name}」更新成功！",
+      "deleted": "Vault「{name}」删除成功！",
+      "list.title": "Vault",
+      "detail.title": "Vault：{name}",
+      "create.form.title": "新建 Vault",
+      "edit.form.title": "编辑 Vault"
+    },
+    "key": {
+      "description": "密钥对象以各种格式保存非对称密钥的表示。",
+      "created": "密钥「{name}」创建成功！",
+      "updated": "密钥「{name}」更新成功！",
+      "deleted": "密钥「{name}」删除成功！",
+      "list.title": "密钥",
+      "detail.title": "密钥：{name}",
+      "create.form.title": "新建密钥",
+      "edit.form.title": "编辑密钥"
+    },
+    "key-set": {
+      "description": "密钥集对象保存一组非对称密钥对象的集合。",
+      "created": "密钥集「{name}」创建成功！",
+      "updated": "密钥集「{name}」更新成功！",
+      "deleted": "密钥集「{name}」删除成功！",
+      "list.title": "密钥集",
+      "detail.title": "密钥集：{name}",
+      "create.form.title": "新建密钥集",
+      "edit.form.title": "编辑密钥集"
+    },
+    "dp-nodes": {
+      "list.title": "数据面节点",
+      "copy.id": "复制 ID",
+      "copy.success": "已复制 {id} 到剪贴板",
+      "not.applicable": "不适用",
+      "headers": {
+        "hostname": "主机名",
+        "version": "版本",
+        "last.seen": "最近在线",
+        "sync.status": "同步状态",
+        "cert.expires.at": "证书过期时间",
+        "log.level": "日志级别",
+        "labels": "标签"
+      },
+      "empty": {
+        "title": "暂无数据面节点",
+        "message": "没有数据面节点连接到此控制面"
+      },
+      "error": {
+        "title": "无法获取数据面节点",
+        "fetch.fail": "获取数据面失败",
+        "copy.fail": "复制到剪贴板失败",
+        "get.log.level.fail": "获取节点 {id} 的日志级别失败"
+      },
+      "bulk.actions": {
+        "placeholder": "{count} 批量操作",
+        "change.log.level": "修改日志级别"
+      },
+      "tooltips": {
+        "revert": "日志级别计划在 {time} 恢复为 {level}",
+        "not.supported": "此数据面节点不支持日志级别调整。"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "subtitle": "登录您的账户",
+      "username": "用户名",
+      "username_placeholder": "请输入用户名",
+      "password": "密码",
+      "password_placeholder": "请输入密码",
+      "sign_in": "登录",
+      "signing_in": "登录中...",
+      "sign_in_token": "使用 Token 登录",
+      "use_token": "使用 API Token 登录",
+      "use_password": "使用密码登录",
+      "token_name": "名称",
+      "token_name_placeholder": "RBAC 用户名",
+      "token_value": "Token",
+      "token_value_placeholder": "API Token",
+      "error": "登录失败，请检查您的凭据。",
+      "token_error": "Token 登录失败。"
+    }
+  },
+  "wish": {
+    "text": "我希望这个页面可以...",
+    "subject": "我希望这个页面({title})可以...",
+    "tooltip": "向我们提交反馈"
+  },
+  "rbac": {
+    "users": {
+      "title": "RBAC 用户",
+      "description": "用于程序化访问的 API Token 用户",
+      "add": "新建用户",
+      "edit": "编辑 RBAC 用户",
+      "create": "新建 RBAC 用户",
+      "name": "名称",
+      "name_placeholder": "输入用户名",
+      "comment": "备注",
+      "comment_placeholder": "输入备注",
+      "token": "API Token",
+      "token_placeholder": "留空则自动生成",
+      "token_hint": "留空将自动生成唯一 Token。",
+      "token_generate": "生成",
+      "token_copy": "复制",
+      "token_regenerate": "重新生成",
+      "token_regenerate_hint": "重新生成将创建新 Token，旧 Token 将立即失效。",
+      "token_created_title": "API Token 已创建",
+      "token_created_body": "您的 API Token 已创建。请立即复制 — 之后将无法再次查看。",
+      "token_copy_button": "复制 Token",
+      "enabled": "启用",
+      "roles": "角色",
+      "roles_title": "角色",
+      "roles_description": "为此用户分配角色",
+      "no_roles": "暂无可用角色，请先创建角色。",
+      "created": "RBAC 用户「{name}」创建成功",
+      "updated": "RBAC 用户「{name}」更新成功",
+      "deleted": "RBAC 用户「{name}」删除成功",
+      "delete_failed": "删除 RBAC 用户失败",
+      "delete_confirm_title": "删除 RBAC 用户",
+      "delete_confirm_body": "此操作不可撤销。输入用户名 <strong>{name}</strong> 以确认删除：",
+      "delete_super_admin": "无法删除拥有超级管理员角色的用户",
+      "load_failed": "加载 RBAC 用户数据失败",
+      "create_failed": "创建 RBAC 用户失败",
+      "update_failed": "更新 RBAC 用户失败",
+      "token_copy_success": "Token 已复制到剪贴板",
+      "token_copy_failed": "复制 Token 失败",
+      "token_regenerate_success": "Token 重新生成成功",
+      "token_regenerate_failed": "Token 重新生成失败",
+      "headers": {
+        "name": "名称",
+        "token": "Token",
+        "enabled": "启用",
+        "roles": "角色",
+        "actions": "操作"
+      }
+    },
+    "roles": {
+      "title": "RBAC 角色",
+      "description": "角色用于管理端点和实体级别的权限",
+      "add": "新建角色",
+      "edit": "编辑角色",
+      "name": "名称",
+      "comment": "备注",
+      "is_default": "默认角色",
+      "info": "角色信息",
+      "endpoints": "端点权限",
+      "entities": "实体权限",
+      "endpoint": "端点",
+      "actions": "操作",
+      "negative": "拒绝规则",
+      "negative_hint": "拒绝规则 — 明确阻止访问",
+      "workspace": "工作空间",
+      "workspace_placeholder": "*（所有工作空间）",
+      "custom_endpoint": "自定义端点",
+      "custom_endpoint_placeholder": "例如 /my-plugin/*",
+      "add_endpoint": "添加端点权限",
+      "add_entity": "添加实体权限",
+      "entity_id": "实体 ID",
+      "entity_type": "实体类型",
+      "select_endpoint": "请至少选择一个端点",
+      "select_action": "请至少选择一个操作",
+      "created": "角色「{name}」创建成功",
+      "updated": "角色「{name}」更新成功",
+      "deleted": "角色「{name}」删除成功",
+      "delete_failed": "删除角色失败",
+      "delete_confirm_title": "删除角色",
+      "delete_confirm_body": "此操作不可撤销。输入角色名 <strong>{name}</strong> 以确认删除：",
+      "endpoint_deleted": "端点权限已删除",
+      "endpoint_delete_failed": "删除端点权限失败",
+      "entity_deleted": "实体权限已删除",
+      "entity_delete_failed": "删除实体权限失败",
+      "endpoint_delete_confirm": "确定要删除此端点权限吗？",
+      "entity_delete_confirm": "确定要删除此实体权限吗？",
+      "load_failed": "加载角色数据失败",
+      "create_failed": "创建角色失败",
+      "update_failed": "更新角色失败",
+      "headers": {
+        "name": "名称",
+        "comment": "备注",
+        "is_default": "默认",
+        "actions": "操作"
+      }
+    },
+    "groups": {
+      "title": "RBAC 用户组",
+      "description": "用户组用于批量管理角色分配",
+      "add": "新建用户组",
+      "headers": {
+        "name": "名称",
+        "comment": "备注",
+        "roles": "角色",
+        "actions": "操作"
+      }
+    },
+    "admins": {
+      "title": "管理员",
+      "description": "通过登录访问的管理员账户",
+      "headers": {
+        "username": "用户名",
+        "email": "邮箱",
+        "status": "状态",
+        "roles": "角色",
+        "actions": "操作"
+      }
+    }
+  }
+}

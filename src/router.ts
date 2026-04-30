@@ -4,12 +4,24 @@ import {
 
 import { config } from 'config'
 import { useInfoStore } from './stores/info'
+import { useAuthStore } from './stores/auth'
 
 const routes: RouteRecordRaw[] = [
-  // Redirect root to default workspace
+  // Redirect root to workspaces list
   {
     path: '/',
-    redirect: '/workspaces/default',
+    redirect: '/workspaces',
+  },
+
+  // Login page
+  {
+    name: 'login',
+    path: '/login',
+    component: () => import('@/pages/Login.vue'),
+    meta: {
+      title: 'Login',
+      public: true,
+    },
   },
 
   // Workspace management pages (outside workspace context)
@@ -410,6 +422,80 @@ const routes: RouteRecordRaw[] = [
     ],
   },
 
+  // Teams pages (outside workspace context)
+  {
+    name: 'teams',
+    path: '/teams',
+    component: () => import('@/pages/teams/List.vue'),
+    meta: {
+      title: 'Teams',
+    },
+  },
+  {
+    name: 'admin-create',
+    path: '/teams/admins/create',
+    component: () => import('@/pages/teams/AdminForm.vue'),
+    meta: {
+      title: 'Create Admin',
+    },
+  },
+  {
+    name: 'admin-edit',
+    path: '/teams/admins/:id/edit',
+    component: () => import('@/pages/teams/AdminForm.vue'),
+    meta: {
+      title: 'Edit Admin',
+    },
+  },
+  {
+    name: 'rbac-user-create',
+    path: '/teams/rbac-users/create',
+    component: () => import('@/pages/teams/RbacUserForm.vue'),
+    meta: {
+      title: 'Create RBAC User',
+    },
+  },
+  {
+    name: 'rbac-user-edit',
+    path: '/teams/rbac-users/:id/edit',
+    component: () => import('@/pages/teams/RbacUserForm.vue'),
+    meta: {
+      title: 'Edit RBAC User',
+    },
+  },
+  {
+    name: 'group-create',
+    path: '/teams/groups/create',
+    component: () => import('@/pages/teams/GroupForm.vue'),
+    meta: {
+      title: 'Create Group',
+    },
+  },
+  {
+    name: 'group-edit',
+    path: '/teams/groups/:id/edit',
+    component: () => import('@/pages/teams/GroupForm.vue'),
+    meta: {
+      title: 'Edit Group',
+    },
+  },
+  {
+    name: 'role-create',
+    path: '/teams/roles/create',
+    component: () => import('@/pages/teams/RoleForm.vue'),
+    meta: {
+      title: 'Create Role',
+    },
+  },
+  {
+    name: 'role-detail',
+    path: '/teams/roles/:id',
+    component: () => import('@/pages/teams/RoleDetail.vue'),
+    meta: {
+      title: 'Role Detail',
+    },
+  },
+
   // not found page
   {
     name: 'not-found',
@@ -496,8 +582,42 @@ export const router = createRouter({
   routes,
 })
 
-router.beforeEach(() => {
+router.beforeEach(async (to) => {
   const infoStore = useInfoStore()
+  const authStore = useAuthStore()
 
-  infoStore.getInfo({ silent: true })
+  try {
+    await infoStore.getInfo({ silent: true })
+  } catch {
+    // getInfo failed (e.g. 401) - if not on a public route, redirect to login
+    if (!to.meta?.public) {
+      return { name: 'login' }
+    }
+    return
+  }
+
+  // Check if RBAC is enabled
+  const enforceRbac = infoStore.infoConfig?.enforce_rbac
+  authStore.rbacEnabled = enforceRbac === true
+  if (!enforceRbac) {
+    return // RBAC not enabled, skip auth
+  }
+
+  // Allow public routes (login)
+  if (to.meta?.public) {
+    // If already logged in, redirect away from login
+    if (to.name === 'login' && authStore.isLoggedIn) {
+      return { name: 'workspaces' }
+    }
+    return
+  }
+
+  // Require authentication
+  if (!authStore.isLoggedIn) {
+    // Try to fetch current user from session
+    await authStore.fetchCurrentUser()
+    if (!authStore.isLoggedIn) {
+      return { name: 'login' }
+    }
+  }
 })

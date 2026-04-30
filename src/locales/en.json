@@ -331,6 +331,26 @@
       }
     }
   },
+  "auth": {
+    "login": {
+      "subtitle": "Sign in to your account",
+      "username": "Username",
+      "username_placeholder": "Enter your username",
+      "password": "Password",
+      "password_placeholder": "Enter your password",
+      "sign_in": "Sign In",
+      "signing_in": "Signing in...",
+      "sign_in_token": "Sign In with Token",
+      "use_token": "Sign in with API token",
+      "use_password": "Use password instead",
+      "token_name": "Name",
+      "token_name_placeholder": "RBAC user name",
+      "token_value": "Token",
+      "token_value_placeholder": "API token",
+      "error": "Login failed. Please check your credentials.",
+      "token_error": "Token login failed."
+    }
+  },
   "wish": {
     "text": "I wish this page would...",
     "subject": "I wish this page({title}) would...",

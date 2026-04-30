@@ -33,6 +33,7 @@ import { useCopyEventHandlers } from '@/composables/useCopyEventHandlers'
 import { useI18n } from '@/composables/useI18n'
 import { useDocsLink } from '@/composables/useDocsLink'
 import { EntityType } from '@/types'
+import { useEntityPermissions } from '@/composables/useEntityPermissions'
 
 defineOptions({
   name: 'KeySetList',
@@ -78,13 +79,7 @@ const keyListConfig = reactive({
   filterSchema,
 })
 
-const canCreate = async () => true
-
-const canRetrieve = async () => true
-
-const canEdit = async () => true
-
-const canDelete = async () => true
+const { canCreate, canDelete, canEdit, canRetrieve } = useEntityPermissions('/key-sets')
 
 const { onCopySuccess, onCopyError } = useCopyEventHandlers()
 

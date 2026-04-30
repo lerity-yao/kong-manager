@@ -4,8 +4,12 @@ import {
 } from 'axios'
 import axios from 'axios'
 import { config } from 'config'
+import { useToaster } from '@/composables/useToaster'
 
 const adminApiUrl = config.ADMIN_API_URL
+
+// Track 401 redirect to avoid infinite loop
+let isRedirectingToLogin = false
 
 class ApiService {
   instance: AxiosInstance
@@ -16,6 +20,59 @@ class ApiService {
       withCredentials: true,
       timeout: 30000,
     })
+
+    // Global 401 response interceptor: clear auth state and redirect to login
+    this.instance.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response?.status === 401 && !isRedirectingToLogin) {
+          // Skip redirect for auth endpoints (login/me failures are expected)
+          const url = error.config?.url || ''
+          const isAuthEndpoint = url.includes('/auth/login') || url.includes('/auth/me') || url.includes('/auth/token')
+          if (!isAuthEndpoint) {
+            isRedirectingToLogin = true
+            // Import dynamically to avoid circular dependency at module init time
+            import('@/stores/auth').then(({ useAuthStore }) => {
+              const authStore = useAuthStore()
+              authStore.currentUser = null
+            }).finally(() => {
+              // Use window.location for a hard redirect to ensure clean state
+              const loginPath = `${config.ADMIN_GUI_PATH}login`
+              if (window.location.pathname !== `${config.ADMIN_GUI_PATH}login`) {
+                window.location.href = loginPath
+              }
+              // Reset flag after navigation
+              setTimeout(() => {
+                isRedirectingToLogin = false
+              }, 1000)
+            })
+          }
+        }
+
+        // Handle 403 Forbidden: refresh permissions and redirect to home
+        if (error.response?.status === 403) {
+          const toaster = useToaster()
+          toaster.open({
+            appearance: 'danger',
+            message: 'Permission denied: You do not have access to this resource',
+          })
+          // Refresh user permissions from DB before redirecting
+          import('@/stores/auth').then(({ useAuthStore }) => {
+            const authStore = useAuthStore()
+            return authStore.fetchCurrentUser()
+          }).finally(() => {
+            // Redirect to workspaces home page after a short delay
+            setTimeout(() => {
+              const homePath = `${config.ADMIN_GUI_PATH}workspaces`
+              if (window.location.pathname !== homePath) {
+                window.location.href = homePath
+              }
+            }, 1500)
+          })
+        }
+        return Promise.reject(error)
+      },
+    )
   }
 
   getInfo() {

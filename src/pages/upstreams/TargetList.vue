@@ -32,6 +32,7 @@ import {
   reactive, ref,
 } from 'vue'
 import { useRoute } from 'vue-router'
+import { useEntityPermissions } from '@/composables/useEntityPermissions'
 
 defineOptions({
   name: 'TargetList',
@@ -89,13 +90,7 @@ onBeforeMount(async () => {
   }
 })
 
-const canCreate = async () => true
-
-const canDelete = async () => true
-
-const canEdit = async () => true
-
-const canRetrieve = async () => true
+const { canCreate, canDelete, canEdit, canRetrieve } = useEntityPermissions('/upstreams')
 
 const canMarkHealthyUnhealthy = computed(
   () => (

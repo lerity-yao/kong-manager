@@ -34,6 +34,7 @@ import { useToaster } from '@/composables/useToaster'
 import { useCurrentWorkspace } from '@/composables/useCurrentWorkspace'
 import { useDocsLink } from '@/composables/useDocsLink'
 import { EntityType } from '@/types'
+import { useEntityPermissions } from '@/composables/useEntityPermissions'
 
 defineOptions({
   name: 'SniList',
@@ -70,13 +71,7 @@ const sniListConfig = reactive({
   filterSchema,
 })
 
-const canCreate = async () => true
-
-const canDelete = async () => true
-
-const canEdit = async () => true
-
-const canRetrieve = async () => true
+const { canCreate, canDelete, canEdit, canRetrieve } = useEntityPermissions('/snis')
 
 const { onCopySuccess, onCopyError } = useCopyEventHandlers()
 
