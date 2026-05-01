@@ -15,6 +15,9 @@
     <template #sidebar-icon-Teams>
       <PeopleIcon />
     </template>
+    <template #sidebar-icon-ApiDocs>
+      <DocumentIcon />
+    </template>
     <template #navbar-right>
       <LanguageSwitcher />
       <UserMenu />
@@ -30,7 +33,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { OverviewIcon, InfoIcon, PeopleIcon } from '@kong/icons'
+import { OverviewIcon, InfoIcon, PeopleIcon, DocumentIcon } from '@kong/icons'
 import { AppLayout, type SidebarPrimaryItem } from '@kong-ui-public/app-layout'
 import { useWorkspaceStore } from '@/stores/workspace'
 import { useAuthStore } from '@/stores/auth'
@@ -112,6 +115,9 @@ const sidebarItems = computed<SidebarPrimaryItem[]>(() => {
     },
   ]
 
+  // API Docs (top-level menu, permission-guarded)
+  const canSeeApiDocs = authStore.hasPermissionGuarded('read', '/api-docs')
+
   // Teams (conditionally added)
   if (canSeeTeams) {
     items.push({
@@ -119,6 +125,16 @@ const sidebarItems = computed<SidebarPrimaryItem[]>(() => {
       to: { name: 'teams' },
       key: 'Teams',
       active: route.path?.startsWith('/teams'),
+    })
+  }
+
+  // API Docs (top-level)
+  if (canSeeApiDocs) {
+    items.push({
+      name: t('api-docs.title'),
+      to: { name: 'api-doc-list' },
+      key: 'ApiDocs',
+      active: route.path?.startsWith('/api-docs'),
     })
   }
 

@@ -23,6 +23,9 @@
     <template #plugins>
       <router-view />
     </template>
+    <template #api-docs>
+      <RouteApiDocsTab :route-id="id" />
+    </template>
   </KTabs>
 </template>
 
@@ -36,6 +39,7 @@ import { useTabs } from '@/composables/useTabs'
 import { useListRedirect } from '@/composables/useListRedirect'
 import { useCurrentWorkspace } from '@/composables/useCurrentWorkspace'
 import { apiService } from '@/services/apiService'
+import RouteApiDocsTab from './RouteApiDocsTab.vue'
 
 defineOptions({
   name: 'RouteDetail',
@@ -49,6 +53,10 @@ const { kongponentTabs: tabs, initialHash, onTabChange } = useTabs([
   {
     title: 'Plugins',
     route: { name: 'route-detail-plugins' },
+  },
+  {
+    title: 'API Docs',
+    route: { name: 'route-detail-api-docs' },
   },
 ])
 

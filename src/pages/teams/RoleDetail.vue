@@ -134,37 +134,37 @@
       </KTabs>
     </template>
 
-    <!-- Delete Role Confirmation Modal -->
-    <KModal
-      v-if="showDeleteRoleModal"
+    <!-- Delete Role Confirmation -->
+    <KPrompt
       :visible="showDeleteRoleModal"
-      :title="'Delete Role'"
-      @cancel="showDeleteRoleModal = false; deleteConfirmInput = ''"
+      title="Delete Role"
+      action-button-appearance="danger"
+      action-button-text="Yes, delete"
+      :confirmation-text="roleName"
+      confirmation-prompt="Type the role name to confirm:"
+      @cancel="showDeleteRoleModal = false"
+      @proceed="deleteRole"
     >
-      <div class="delete-confirm-content">
+      <template #default>
         <p>Are you sure you want to delete role <strong>"{{ roleName }}"</strong>?</p>
-        <p>This action cannot be undone. Type <strong>{{ roleName }}</strong> to confirm:</p>
-        <KInput
-          v-model="deleteConfirmInput"
-          :placeholder="roleName"
-        />
-      </div>
-      <template #footer>
-        <KButton
-          appearance="secondary"
-          @click="showDeleteRoleModal = false; deleteConfirmInput = ''"
-        >
-          Cancel
-        </KButton>
-        <KButton
-          appearance="danger"
-          :disabled="deleteConfirmInput !== roleName"
-          @click="deleteRole"
-        >
-          Delete
-        </KButton>
+        <p>This action cannot be undone.</p>
       </template>
-    </KModal>
+    </KPrompt>
+
+    <!-- Delete Permission Confirmation -->
+    <KPrompt
+      :visible="showDeletePermModal"
+      title="Delete Permission"
+      action-button-appearance="danger"
+      action-button-text="Yes, delete"
+      @cancel="showDeletePermModal = false"
+      @proceed="doDeletePerm"
+    >
+      <template #default>
+        <p>Are you sure you want to delete this {{ deletePermType === 'endpoint' ? 'endpoint' : 'entity' }} permission?</p>
+        <p>This action cannot be undone.</p>
+      </template>
+    </KPrompt>
 
     <!-- Add Endpoint Permission Modal -->
     <KModal
@@ -319,7 +319,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { KButton, KCard, KTableData, KBadge, KTabs, KLabel, KInput, KDropdownItem, KModal } from '@kong/kongponents'
+import { KButton, KCard, KTableData, KBadge, KTabs, KLabel, KDropdownItem, KModal, KPrompt } from '@kong/kongponents'
 import { apiService } from '@/services/apiService'
 import { useToaster } from '@/composables/useToaster'
 import { useAuthStore } from '@/stores/auth'
@@ -340,7 +340,6 @@ const activePermTab = ref('endpoints')
 
 // Delete role confirmation state
 const showDeleteRoleModal = ref(false)
-const deleteConfirmInput = ref('')
 
 const permTabs = [
   { hash: 'endpoints', title: 'Endpoint Permissions' },
@@ -568,9 +567,30 @@ async function deleteEndpointPermission(epId: string) {
   }
 }
 
+// Delete permission confirmation
+const showDeletePermModal = ref(false)
+const deletePermType = ref<'endpoint' | 'entity'>('endpoint')
+const deletePermId = ref('')
+
 function confirmDeleteEndpoint(epId: string) {
-  if (!confirm('Are you sure you want to delete this endpoint permission?')) return
-  deleteEndpointPermission(epId)
+  deletePermType.value = 'endpoint'
+  deletePermId.value = epId
+  showDeletePermModal.value = true
+}
+
+function confirmDeleteEntity(entId: string) {
+  deletePermType.value = 'entity'
+  deletePermId.value = entId
+  showDeletePermModal.value = true
+}
+
+async function doDeletePerm() {
+  if (deletePermType.value === 'endpoint') {
+    await deleteEndpointPermission(deletePermId.value)
+  } else {
+    await deleteEntityPermission(deletePermId.value)
+  }
+  showDeletePermModal.value = false
 }
 
 async function addEntityPermission() {
@@ -615,13 +635,7 @@ async function deleteEntityPermission(entId: string) {
   }
 }
 
-function confirmDeleteEntity(entId: string) {
-  if (!confirm('Are you sure you want to delete this entity permission?')) return
-  deleteEntityPermission(entId)
-}
-
 async function deleteRole() {
-  if (deleteConfirmInput.value !== roleName.value) return
   try {
     await apiService.delete(`rbac/roles/${roleId}`)
     toaster.open({ appearance: 'success', message: `Role "${roleName.value}" deleted` })

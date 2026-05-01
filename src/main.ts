@@ -14,7 +14,7 @@ const DEFAULT_LOCALE = 'en-US'
 const LOCALE_MODULES = [
   'Global', 'Workspaces', 'Overview', 'About', 'Services', 'Routes',
   'Consumers', 'Plugins', 'Upstreams', 'Certificates', 'CA_Certificates', 'SNIs',
-  'Vaults', 'Keys', 'Key_Sets', 'Teams', 'RBAC',
+  'Vaults', 'Keys', 'Key_Sets', 'Teams', 'RBAC', 'API_Docs',
 ]
 
 // 后端模块名 → en.json 中的 key 路径
@@ -37,6 +37,7 @@ const LOCALE_KEY_MAP: Record<string, string> = {
   Key_Sets: 'entities.key-set',
   Teams: 'teams',
   RBAC: 'entities.rbac',
+  API_Docs: 'api-docs',
 }
 
 const savedLocale = localStorage.getItem('kong-manager-locale') || DEFAULT_LOCALE

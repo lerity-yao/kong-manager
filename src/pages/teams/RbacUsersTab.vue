@@ -61,44 +61,29 @@
       </KTableData>
     </KCard>
 
-    <!-- Delete User Confirmation Modal -->
-    <KModal
-      v-if="showDeleteUserModal"
+    <!-- Delete User Confirmation -->
+    <KPrompt
       :visible="showDeleteUserModal"
-      :title="'Delete User'"
-      @cancel="showDeleteUserModal = false; deleteConfirmInput = ''"
+      title="Delete User"
+      action-button-appearance="danger"
+      action-button-text="Yes, delete"
+      :confirmation-text="deleteUserTarget?.name || ''"
+      confirmation-prompt="Type the user name to confirm:"
+      @cancel="showDeleteUserModal = false"
+      @proceed="deleteUser"
     >
-      <div class="delete-confirm-content">
+      <template #default>
         <p>Are you sure you want to delete user <strong>"{{ deleteUserTarget?.name }}"</strong>?</p>
-        <p>This action cannot be undone. Type <strong>{{ deleteUserTarget?.name }}</strong> to confirm:</p>
-        <KInput
-          v-model="deleteConfirmInput"
-          :placeholder="deleteUserTarget?.name"
-        />
-      </div>
-      <template #footer>
-        <KButton
-          appearance="secondary"
-          @click="showDeleteUserModal = false"
-        >
-          Cancel
-        </KButton>
-        <KButton
-          appearance="danger"
-          :disabled="deleteConfirmInput !== deleteUserTarget?.name"
-          @click="deleteUser"
-        >
-          Delete
-        </KButton>
+        <p>This action cannot be undone.</p>
       </template>
-    </KModal>
+    </KPrompt>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { KButton, KCard, KTableData, KBadge, KDropdownItem, KModal, KInput } from '@kong/kongponents'
+import { KButton, KCard, KTableData, KBadge, KDropdownItem, KPrompt } from '@kong/kongponents'
 import { apiService } from '@/services/apiService'
 import { useAuthStore } from '@/stores/auth'
 import { useToaster } from '@/composables/useToaster'
@@ -114,7 +99,6 @@ const fetcherCacheKey = computed(() => `rbac-users-${cacheKey.value}`)
 
 // Delete user confirmation state
 const showDeleteUserModal = ref(false)
-const deleteConfirmInput = ref('')
 const deleteUserTarget = ref<{ id: string; name: string } | null>(null)
 
 const headers = [
@@ -154,13 +138,11 @@ function confirmDeleteUser(row: any) {
     return
   }
   deleteUserTarget.value = { id: row.id, name: row.name }
-  deleteConfirmInput.value = ''
   showDeleteUserModal.value = true
 }
 
 async function deleteUser() {
   if (!deleteUserTarget.value) return
-  if (deleteConfirmInput.value !== deleteUserTarget.value.name) return
   try {
     await apiService.delete(`rbac/users/${deleteUserTarget.value.id}`)
     toaster.open({ appearance: 'success', message: `User "${deleteUserTarget.value.name}" deleted` })

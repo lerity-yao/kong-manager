@@ -23,6 +23,9 @@
     <template #plugins>
       <router-view />
     </template>
+    <template #api-docs>
+      <ServiceApiDocsTab :service-id="id" />
+    </template>
   </KTabs>
 </template>
 
@@ -34,6 +37,7 @@ import { useDetailGeneralConfig } from '@/composables/useDetailGeneralConfig'
 import { useI18n } from '@/composables/useI18n'
 import { useTabs } from '@/composables/useTabs'
 import { apiService } from '@/services/apiService'
+import ServiceApiDocsTab from './ServiceApiDocsTab.vue'
 
 defineOptions({
   name: 'ServiceDetail',
@@ -51,6 +55,10 @@ const { kongponentTabs: tabs, initialHash, onTabChange } = useTabs([
   {
     title: 'Plugins',
     route: { name: 'service-detail-plugins' },
+  },
+  {
+    title: 'API Docs',
+    route: { name: 'service-detail-api-docs' },
   },
 ])
 

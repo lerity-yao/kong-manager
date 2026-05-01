@@ -118,7 +118,36 @@ const routes: RouteRecordRaw[] = [
           title: 'Gateway Service Plugins',
         },
       },
+      {
+        name: 'service-detail-api-docs',
+        path: 'api-docs',
+        component: () => import('@/pages/services/ServiceApiDocsTab.vue'),
+        meta: {
+          entity: 'service',
+          title: 'Gateway Service API Docs',
+        },
+      },
     ],
+  },
+
+  // api-docs pages (top-level, not workspace-scoped)
+  {
+    name: 'api-doc-list',
+    path: '/api-docs',
+    component: () => import('@/pages/api-docs/List.vue'),
+    meta: {
+      entity: 'api-doc',
+      title: 'API Docs',
+    },
+  },
+  {
+    name: 'api-doc-detail',
+    path: '/api-docs/:name',
+    component: () => import('@/pages/api-docs/Detail.vue'),
+    meta: {
+      entity: 'api-doc',
+      title: 'View API Doc',
+    },
   },
 
   // route pages
@@ -166,6 +195,15 @@ const routes: RouteRecordRaw[] = [
           entity: 'route',
           scopedIn: 'routes',
           title: 'Route Plugins',
+        },
+      },
+      {
+        name: 'route-detail-api-docs',
+        path: 'api-docs',
+        component: () => import('@/pages/routes/RouteApiDocsTab.vue'),
+        meta: {
+          entity: 'route',
+          title: 'Route API Docs',
         },
       },
     ],
